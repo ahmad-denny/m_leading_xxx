@@ -796,10 +796,14 @@
                 var avatarEl = document.getElementById('userAvatarCircle');
                 var displayName = user.nama || 'User';
                 var displayPos = user.posisi || '-';
-
+        
+                // Hitung inisial 2 huruf dari nama user
+                var userInitials = getInitials(displayName);
+        
                 if (nameEl) nameEl.textContent = displayName;
                 if (posEl) posEl.textContent = displayPos;
-                if (avatarEl) avatarEl.textContent = displayName.charAt(0).toUpperCase();
+                // Set ke avatar header
+                if (avatarEl) avatarEl.textContent = userInitials;
                 
                 var sidebarNameEl = document.getElementById('sidebarUserName');
                 var sidebarPosEl = document.getElementById('sidebarUserPosition');
@@ -807,9 +811,10 @@
                 
                 if (sidebarNameEl) sidebarNameEl.textContent = displayName;
                 if (sidebarPosEl) sidebarPosEl.textContent = displayPos;
-                if (sidebarAvatarEl) sidebarAvatarEl.textContent = displayName.charAt(0).toUpperCase();
+                // Set ke avatar sidebar
+                if (sidebarAvatarEl) sidebarAvatarEl.textContent = userInitials;
             }
-
+        
             document.getElementById('mainContentWrapper').style.display = 'block';
             renderDataTabs();
             loadJsonData(currentActiveJson);
@@ -1232,7 +1237,21 @@
                 }
             });
         }
-
+        
+        function getInitials(name) {
+            if (!name) return 'U';
+            // Pecah nama berdasarkan spasi dan ambil kata yang berisi karakter/huruf
+            const words = name.trim().split(/\s+/);
+            if (words.length >= 2) {
+                // Ambil huruf pertama kata pertama + huruf pertama kata kedua
+                return (words[0].charAt(0) + words[1].charAt(0)).toUpperCase();
+            } else if (words.length === 1 && words[0].length > 0) {
+                // Jika hanya 1 kata, ambil 2 huruf awal (misal: "Ahmad" -> "AH")
+                return words[0].substring(0, 2).toUpperCase();
+            }
+            return 'U';
+        }
+ 
         // PERBAIKAN FINAL: Menggunakan window.onclick sederhana
         // Sidebar TIDAK AKAN tertutup oleh klik apapun selain tombol X
         window.onclick = function(e) { 

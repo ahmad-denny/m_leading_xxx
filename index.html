@@ -518,19 +518,9 @@
             <button class="sidebar-close" onclick="applySidebarFilters(); closeSidebar();">&times;</button>
         </div>
         <div class="sidebar-content">
-            <div class="sidebar-section">
-                <div class="sidebar-section-title"><i class="fas fa-user-circle"></i> Logged in as</div>
-                <div class="sidebar-user-info">
-                    <div class="sidebar-user-avatar" id="sidebarUserAvatar">U</div>
-                    <div class="sidebar-user-details">
-                        <div class="sidebar-user-name" id="sidebarUserName">-</div>
-                        <div class="sidebar-user-position" id="sidebarUserPosition">-</div>
-                    </div>
-                </div>
-            </div>
-            
+            <!--
             <div class="sidebar-divider"></div>
-            
+            -->
             <div class="sidebar-section">
                 <div class="sidebar-section-title"><i class="fas fa-filter"></i> Filter</div>
                 <div class="sidebar-filter-group">
@@ -549,9 +539,9 @@
                     <i class="fas fa-sync-alt"></i> Reset
                 </button>
             </div>
-            
+            <!--
             <div class="sidebar-divider"></div>
-            
+            -->
             <div class="sidebar-section">
                 <div class="sidebar-section-title"><i class="fas fa-cog"></i> Quick Actions</div>
                 <button class="sidebar-btn sidebar-btn-ranking" onclick="openRankingModal(); closeSidebar();">
@@ -561,7 +551,17 @@
                     <i class="fas fa-camera"></i> KPI Snapshot
                 </button>
             </div>
-        </div>
+            <div class="sidebar-section">
+                <div class="sidebar-section-title"><i class="fas fa-user-circle"></i> Logged in as</div>
+                <div class="sidebar-user-info">
+                    <div class="sidebar-user-avatar" id="sidebarUserAvatar">U</div>
+                    <div class="sidebar-user-details">
+                        <div class="sidebar-user-name" id="sidebarUserName">-</div>
+                        <div class="sidebar-user-position" id="sidebarUserPosition">-</div>
+                    </div>
+                </div>
+            </div>
+        </div>        
     </div>
 
     <div id="mainContentWrapper" class="main-content" style="display:none;">

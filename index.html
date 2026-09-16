@@ -634,14 +634,19 @@
         <div class="header">
             <div class="header-content-wrapper">
                 <div class="header-left-group">
-                    <button class="menu-toggle" onclick="openSidebar()" title="Open Menu" style="display: none;"><i class="fas fa-bars"></i></button>
+                    <button class="menu-toggle" onclick="openSidebar()" title="Open Menu" style="display: none;"><i class="fas fa-bars"></i></button>                    
+                    <div style="width: 100%; display: flex; align-items: flex-start; gap: 8px;">
+                        <!-- Kolom Kiri: Logo -->
+                        <img src="img/BMI.png" alt="Bank Muamalat Logo" class="logo" width="30" height="30">
                     
-                    <div style="width: 100%;">
-                        <h1>
-                            <img src="img/BMI.png" alt="Bank Muamalat Logo" class="logo" width="30" height="30"> 
-                            <span style="font-size: 15px; margin-left: -5px; font-weight: bold; color: var(--primary);">LEADING INDICATOR<br><span id="headerSubtitle" style="font-size: 14px; font-weight: bold; color: var(--text-muted);">Region Sumatera</span></span>
-                        </h1>
-                        <i><p id="headerMeta"> -- Juni 2026 | 💼 --</p></i>
+                        <!-- Kolom Kanan: Judul, Subtitle, dan Meta Tanggal (Semua Terjajar) -->
+                        <div style="display: flex; flex-direction: column;">
+                            <h1 style="margin: 0; padding: 0; line-height: 1.2;">
+                                <span style="font-size: 15px; font-weight: bold; color: var(--primary);">LEADING INDICATOR</span><br>
+                                <span id="headerSubtitle" style="font-size: 14px; font-weight: bold; color: var(--text-muted);">Region Sumatera</span>
+                            </h1>
+                            <i style="margin-top: 4px;"><p id="headerMeta" style="margin: 0;"> -- Juni 2026 | 💼 --</p></i>
+                        </div>
                     </div>
                 </div>
                 

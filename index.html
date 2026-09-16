@@ -55,10 +55,10 @@
 
         .main-content { display: none; }
 
-        /* HEADER FIXED & LEFT ALIGNED */
+        /* HEADER FIXED & LEFT ALIGNED - WHITE BACKGROUND */
         .header { 
-            background: linear-gradient(135deg, var(--primary), #2d1b50); 
-            color: white; 
+            background: #ffffff; 
+            color: var(--text); 
             padding: 10px 20px 0 20px; 
             position: fixed; 
             top: 0; left: 0; right: 0; 
@@ -67,8 +67,13 @@
             flex-direction: column; 
             align-items: flex-start; 
             justify-content: center; 
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2); 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06); 
+            border-bottom: 1px solid var(--border);
             min-height: 110px; 
+        }
+
+        [data-theme="dark"] .header {
+            background: var(--card-bg);
         }
         
         .header-content-wrapper { 
@@ -99,20 +104,22 @@
             text-align: left; 
             line-height: 1.1; 
             flex: 1; 
+            color: var(--text);
         }
         .header h1 img.logo { object-fit: contain; vertical-align: middle; margin-top: -2px; }
-        .header p { font-size: 0.85rem; opacity: 0.9; margin: 4px 0 0 0; text-align: left; }
+        .header p { font-size: 0.85rem; color: var(--text-muted); margin: 4px 0 0 0; text-align: left; }
         
         .data-tabs-container { width: 100%; display: flex; justify-content: flex-start; margin-top: 10px; margin-bottom: 0; gap: 0; overflow-x: auto; padding-bottom: 0; }
-        .data-tab-btn { padding: 8px 16px; background: rgba(0, 0, 0, 0.15); color: rgba(255, 255, 255, 0.8); border: 1px solid transparent; border-bottom: 1px solid transparent; border-radius: 4px 4px 0 0; cursor: pointer; font-size: 0.8rem; font-weight: 600; white-space: nowrap; transition: all 0.2s ease; margin-right: 5px; display: inline-flex; align-items: center; }
-        .data-tab-btn:hover { background: rgba(255, 255, 255, 0.15); color: #ffffff; }
-        .data-tab-btn.active { padding: 8px 16px; border: 1px solid var(--card-bg); border-bottom: none; background: var(--card-bg); color: var(--primary); border-radius: 4px 4px 0 0; font-weight: bold; position: relative; z-index: 2; }
-        [data-theme="dark"] .data-tab-btn.active { background: #16213e !important; color: #ffffff !important; border: 1px solid #16213e !important; border-bottom: none !important; font-weight: bold; }
+        .data-tab-btn { padding: 8px 16px; background: var(--bg); color: var(--text-muted); border: 1px solid var(--border); border-bottom: none; border-radius: 4px 4px 0 0; cursor: pointer; font-size: 0.8rem; font-weight: 600; white-space: nowrap; transition: all 0.2s ease; margin-right: 5px; display: inline-flex; align-items: center; }
+        .data-tab-btn:hover { background: var(--highlight-bg); color: var(--primary); }
+        .data-tab-btn.active { padding: 8px 16px; border: 1px solid var(--border); border-bottom: 2px solid var(--primary); background: var(--card-bg); color: var(--primary); border-radius: 4px 4px 0 0; font-weight: bold; position: relative; z-index: 2; }
+        [data-theme="dark"] .data-tab-btn.active { background: #16213e !important; color: var(--card-title-light) !important; border: 1px solid var(--border) !important; border-bottom: 2px solid var(--primary) !important; font-weight: bold; }
         
         .header-actions { display: flex; align-items: center; gap: 10px; z-index: 101; flex-shrink: 0; }
-        .theme-toggle, .filter-toggle, .capture-toggle, .menu-toggle { background: rgba(255,255,255,0.15); border: none; color: white; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.9em; flex-shrink: 0; transition: background 0.2s; }
-        .theme-toggle:hover, .filter-toggle:hover, .capture-toggle:hover, .menu-toggle:hover { background: rgba(255,255,255,0.25); }
-        .filter-toggle.active { background: var(--warning); color: #333; }
+        .theme-toggle, .filter-toggle, .capture-toggle, .menu-toggle { background: var(--bg); border: 1px solid var(--border); color: var(--primary); width: 32px; height: 32px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.9em; flex-shrink: 0; transition: all 0.2s; }
+        .theme-toggle:hover, .filter-toggle:hover, .capture-toggle:hover, .menu-toggle:hover { background: var(--highlight-bg); color: var(--primary); }
+        [data-theme="dark"] .theme-toggle, [data-theme="dark"] .filter-toggle, [data-theme="dark"] .capture-toggle, [data-theme="dark"] .menu-toggle { color: var(--card-title-light); }
+        .filter-toggle.active { background: var(--warning); color: #333; border-color: var(--warning); }
         
         .controls { display: none; align-items: center; padding: 15px 20px; background: var(--card-bg); margin: -1px 20px 15px 20px; border-radius: 0 0 var(--radius) var(--radius); box-shadow: var(--shadow); gap: 5px; flex-wrap: nowrap; animation: slideDown 0.3s ease; position: relative; z-index: 10; }
         @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
@@ -444,13 +451,10 @@
             .breakdown-container { display: none !important; }
             .modal-capture-btn { width: 28px; height: 28px; font-size: 0.75rem; margin-bottom: 6px; }
             
-            /* Sembunyikan user info chip di header pada mobile */
             #userInfoChip { display: none !important; }
             
-            /* Fix untuk mobile: pastikan modal tidak punya transform saat capture */
             .modal-content { transform: none !important; animation: none !important; }
             
-            /* Mencegah select memicu event penutupan sidebar */
             .sidebar select {
                 position: relative;
                 z-index: 1002;
@@ -508,7 +512,7 @@
     })();
     </script>
 
-    <!-- SIDEBAR OVERLAY (Tanpa onclick) -->
+    <!-- SIDEBAR OVERLAY -->
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
     
     <!-- SIDEBAR MENU -->
@@ -518,19 +522,14 @@
             <button class="sidebar-close" onclick="applySidebarFilters(); closeSidebar();">&times;</button>
         </div>
         <div class="sidebar-content">
-            <!--
-            <div class="sidebar-divider"></div>
-            -->
             <div class="sidebar-section">
                 <div class="sidebar-section-title"><i class="fas fa-filter"></i> Filter</div>
                 <div class="sidebar-filter-group">
-                    <!-- PERBAIKAN: Hanya memanggil fungsi pengisian opsi, bukan apply filter -->
                     <select id="sidebarCoBranchFilter" onchange="handleSidebarCoBranchChange()">
                         <option value="">Select Co-Branch</option>
                     </select>
                 </div>
                 <div class="sidebar-filter-group">
-                    <!-- PERBAIKAN: Apply filter DAN tutup sidebar hanya saat Branch dipilih -->
                     <select id="sidebarBranchFilter">
                         <option value="">Select Branch</option>
                     </select>
@@ -539,9 +538,6 @@
                     <i class="fas fa-sync-alt"></i> Reset
                 </button>
             </div>
-            <!--
-            <div class="sidebar-divider"></div>
-            -->
             <div class="sidebar-section">
                 <div class="sidebar-section-title"><i class="fas fa-cog"></i> Quick Actions</div>
                 <button class="sidebar-btn sidebar-btn-ranking" onclick="openRankingModal(); closeSidebar();">
@@ -572,7 +568,7 @@
                     <div style="width: 100%;">
                         <h1>
                             <img src="img/BMI.png" alt="Bank Muamalat Logo" class="logo" width="30" height="30"> 
-                            <span style="font-size: 15px; margin-left: -5px;font-weight: bold;">LEADING INDICATOR<br><span id="headerSubtitle" style="font-size: 13px;font-weight: normal">Region Sumatera</span></span>
+                            <span style="font-size: 15px; margin-left: -5px; font-weight: bold; color: var(--primary);">LEADING INDICATOR<br><span id="headerSubtitle" style="font-size: 13px; font-weight: normal; color: var(--text-muted);">Region Sumatera</span></span>
                         </h1>
                         <p id="headerMeta"> -- Juni 2026 | 💼 --</p>
                     </div>
@@ -583,11 +579,11 @@
                     <button class="filter-toggle" onclick="toggleFilterMenu()" title="Show/Hide Filter" style="display: none;"><i class="fas fa-filter" id="filterIcon"></i></button>
                     <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Dark/Light Mode"><i class="fas fa-moon" id="themeIcon"></i></button>
 
-                    <div id="userInfoChip" style="display:flex; align-items:center; gap:8px; margin-left:6px; padding-left:12px; border-left:1px solid rgba(255,255,255,0.25);">
-                        <div id="userAvatarCircle" style="width:30px; height:30px; border-radius:50%; background:rgba(255,255,255,0.2); display:flex; align-items:center; justify-content:center; font-size:0.75rem; font-weight:700; flex-shrink:0;">U</div>
+                    <div id="userInfoChip" style="display:flex; align-items:center; gap:8px; margin-left:6px; padding-left:12px; border-left:1px solid var(--border);">
+                        <div id="userAvatarCircle" style="width:30px; height:30px; border-radius:50%; background:var(--primary); color:white; display:flex; align-items:center; justify-content:center; font-size:0.75rem; font-weight:700; flex-shrink:0;">U</div>
                         <div style="line-height:1.15; text-align:left;">
-                            <div id="userNameChip" style="font-size:0.75rem; font-weight:600; white-space:nowrap;">-</div>
-                            <div id="userPosChip" style="font-size:0.65rem; opacity:0.8; white-space:nowrap;">-</div>
+                            <div id="userNameChip" style="font-size:0.75rem; font-weight:600; white-space:nowrap; color:var(--text);">-</div>
+                            <div id="userPosChip" style="font-size:0.65rem; color:var(--text-muted); white-space:nowrap;">-</div>
                         </div>
                     </div>
                 </div>
@@ -694,7 +690,6 @@
             }
         }
 
-        // Sidebar functions
         function openSidebar() {
             document.getElementById('sidebarMenu').classList.add('active');
             document.getElementById('sidebarOverlay').classList.add('active');
@@ -726,7 +721,6 @@
             }
         }
 
-        // PERBAIKAN UTAMA: Fungsi ini HANYA mengisi opsi Branch, TIDAK menutup sidebar
         function handleSidebarCoBranchChange(shouldApplyFilter = false) {
             const coVal = document.getElementById('sidebarCoBranchFilter').value;
             const brSelect = document.getElementById('sidebarBranchFilter');
@@ -739,24 +733,17 @@
                 [...brSet].sort().forEach(br => { brSelect.innerHTML += `<option value="${br}">${br}</option>`; });
                 if([...brSet].includes(currentBrVal)) brSelect.value = currentBrVal;
             }
-            
-            // PENTING: Tidak memanggil applySidebarFilters() atau closeSidebar() di sini
-            // Biarkan user memilih Branch terlebih dahulu
         }
 
-        // PERBAIKAN UTAMA: Fungsi ini dipanggil HANYA saat Branch dipilih
         function applySidebarFilters() {
-            // Ambil nilai TERBARU dari dropdown sidebar saat tombol X ditekan
             const coVal = document.getElementById('sidebarCoBranchFilter').value;
             const brVal = document.getElementById('sidebarBranchFilter').value;
             
-            // Suntikkan nilai tersebut ke filter utama (desktop)
             const mainCoSelect = document.getElementById('coBranchFilter');
             const mainBrSelect = document.getElementById('branchFilter');
             
             mainCoSelect.value = coVal;
             
-            // Penting: Isi ulang opsi branch utama jika berubah, lalu set nilainya
             if (coVal) {
                 const brSet = new Set(rawData.filter(d => d['co'] === coVal).map(d => d['br']).filter(Boolean));
                 mainBrSelect.innerHTML = '<option value="">Select Branch</option>';
@@ -768,11 +755,7 @@
             }
             
             mainBrSelect.value = brVal;
-            
-            // Jalankan filtering dan update dashboard
             applyFilters(); 
-            
-            // Tutup sidebar
             closeSidebar(); 
         }
 
@@ -780,7 +763,6 @@
             document.getElementById('sidebarCoBranchFilter').value = "";
             document.getElementById('sidebarBranchFilter').innerHTML = '<option value="">Select Branch</option>';
             
-            // Sync dengan filter utama
             document.getElementById('coBranchFilter').value = "";
             document.getElementById('branchFilter').innerHTML = '<option value="">Select Branch</option>';
             
@@ -788,7 +770,7 @@
             closeSidebar();
         }
 
-            document.addEventListener('authReady', function (e) {
+        document.addEventListener('authReady', function (e) {
             var user = e.detail;
             if (user) {
                 var nameEl = document.getElementById('userNameChip');
@@ -796,21 +778,13 @@
                 var avatarEl = document.getElementById('userAvatarCircle');
                 var displayName = user.nama || 'User';
                 
-                // --- BAGIAN YANG DIUBAH ---
                 var userPos = user.posisi || '-';
-                // Mengambil lokasi/region/cabang dari data user
                 var userLoc = user.lokasi || user.region || user.cabang || '';
-                
-                // Jika lokasi ada, gabungkan menjadi "Posisi - Lokasi", jika tidak ada cukup tampilkan Posisi
                 var displayPos = userLoc ? (userPos + ' - ' + userLoc) : userPos;
-                // ---------------------------
-        
-                // Hitung inisial 2 huruf dari nama user
                 var userInitials = getInitials(displayName);
         
                 if (nameEl) nameEl.textContent = displayName;
                 if (posEl) posEl.textContent = displayPos;
-                // Set ke avatar header
                 if (avatarEl) avatarEl.textContent = userInitials;
                 
                 var sidebarNameEl = document.getElementById('sidebarUserName');
@@ -819,7 +793,6 @@
                 
                 if (sidebarNameEl) sidebarNameEl.textContent = displayName;
                 if (sidebarPosEl) sidebarPosEl.textContent = displayPos;
-                // Set ke avatar sidebar
                 if (sidebarAvatarEl) sidebarAvatarEl.textContent = userInitials;
             }
         
@@ -1248,27 +1221,19 @@
         
         function getInitials(name) {
             if (!name) return 'U';
-            // Pecah nama berdasarkan spasi dan ambil kata yang berisi karakter/huruf
             const words = name.trim().split(/\s+/);
             if (words.length >= 2) {
-                // Ambil huruf pertama kata pertama + huruf pertama kata kedua
                 return (words[0].charAt(0) + words[1].charAt(0)).toUpperCase();
             } else if (words.length === 1 && words[0].length > 0) {
-                // Jika hanya 1 kata, ambil 2 huruf awal (misal: "Ahmad" -> "AH")
                 return words[0].substring(0, 2).toUpperCase();
             }
             return 'U';
         }
  
-        // PERBAIKAN FINAL: Menggunakan window.onclick sederhana
-        // Sidebar TIDAK AKAN tertutup oleh klik apapun selain tombol X
         window.onclick = function(e) { 
             if (e.target == document.getElementById('rankingModal')) {
                 closeRankingModal(); 
             }
-            // Tidak ada logika penutupan sidebar di sini sama sekali.
-            // Overlay (#sidebarOverlay) sudah tidak punya onclick, 
-            // dan dropdown select tidak akan memicu penutupan.
         }
 
         document.addEventListener('contextmenu', e => e.preventDefault());

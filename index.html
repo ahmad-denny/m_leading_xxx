@@ -408,7 +408,17 @@
         .sidebar-user-details {
             flex: 1;
         }
-               
+        
+        .sidebar-user-name {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+        
+        .sidebar-user-position {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
         
         .sidebar-filter-group {
             margin-bottom: 12px;
@@ -611,8 +621,13 @@
         
         /* Badge REGION Green */
         .user-region-badge {
-            font-weight: 600;
-            color: #8b95a5;
+            background-color: #e8f8f0;
+            color: #10b981;
+            font-size: 0.68rem;
+            font-weight: 700;
+            padding: 1px 6px;
+            border-radius: 6px;
+            letter-spacing: 0.3px;
             text-transform: uppercase;
         }
         
@@ -704,8 +719,8 @@
                 <div class="sidebar-user-info">
                     <div class="sidebar-user-avatar" id="sidebarUserAvatar">U</div>
                     <div class="sidebar-user-details">
-                        <div class="sidebar-user-name" id="sidebarUserName">|</div>
-                        <div class="sidebar-user-position" id="sidebarUserPosition">|</div>
+                        <div class="sidebar-user-name" id="sidebarUserName">•</div>
+                        <div class="sidebar-user-position" id="sidebarUserPosition">•</div>
                     </div>
                 </div>
             </div>
@@ -741,17 +756,17 @@
                     <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Dark/Light Mode"><i class="fas fa-moon" id="themeIcon"></i></button>
                     -->
 
-                    <div class="hidden sm:flex items-center gap-2.5 p-1.5 pr-4 rounded-full bg-transparent dark:bg-slate-800">
-                        <img id="sidebar-user-avatar" src="https://ui-avatars.com/api/?name=AD&background=6366f1&color=fff" alt="User" class="w-9 h-9 rounded-full shrink-0">
-                        <div class="min-w-0 hidden md:block">
-                            <p class="text-xs font-bold text-slate-800 dark:text-slate-100 tracking-wide uppercase truncate" id="sidebar-user-name">AHMAD DENNY</p>
-                            <div class="flex items-center gap-1.5 text-[11px] font-medium text-slate-400">
-                                <span id="sidebar-user-position">RBPM •</span>
-                                <span class="bg-emerald-50 text-emerald-600 dark:bg-emerald-950/50 dark:text-emerald-400 text-[10px] font-semibold px-2 py-0.5 rounded-md tracking-wider border border-emerald-100 dark:border-emerald-800/50" id="sidebar-user-location">REGION</span>
+                    <div id="userInfoChip">
+                        <div id="userAvatarCircle">AD</div>
+                        <div class="user-info-text">
+                            <div id="userNameChip">AHMAD DENNY</div>
+                            <div class="user-sub-info">
+                                <span id="userPosChip">RBPM</span>
+                                <span class="user-info-dot">•</span>
+                                <span class="user-region-badge" id="userRegionChip">REGION</span>
                             </div>
                         </div>
-                    </div>
-                
+                    </div>                    
                 </div>
             </div>
             <div class="data-tabs-container" id="dataTabsContainer"></div>
@@ -936,39 +951,32 @@
             closeSidebar();
         }
 
-        document.addEventListener('authReady', (e) => {
-            const user = e.detail;
+        document.addEventListener('authReady', function (e) {
+            var user = e.detail;
             if (user) {
-                // Elemen Desktop
-                const nameEl = document.getElementById('sidebar-user-name');
-                const posTextEl = document.getElementById('sidebar-user-position');
-                const locBadgeEl = document.getElementById('sidebar-user-location');
-                const avatarEl = document.getElementById('sidebar-user-avatar');
+                var nameEl = document.getElementById('userNameChip');
+                var posEl = document.getElementById('userPosChip');
+                var regionEl = document.getElementById('userRegionChip');
+                var avatarEl = document.getElementById('userAvatarCircle');
+                
+                var displayName = user.nama || 'AHMAD DENNY';
+                var userPos = user.posisi || 'RBPM';
+                var userRegion = user.region || user.lokasi || 'REGION';
+                var userInitials = getInitials(displayName);
         
-                // Elemen Mobile Card
-                const mobileNameEl = document.getElementById('userNameSidebar');
-                const mobilePosEl = document.getElementById('userPosSidebar');
-                const mobileAvatarEl = document.getElementById('userAvatarSidebar');
+                if (nameEl) nameEl.textContent = displayName.toUpperCase();
+                if (posEl) posEl.textContent = userPos.toUpperCase();
+                if (regionEl) regionEl.textContent = userRegion.toUpperCase();
+                if (avatarEl) avatarEl.textContent = userInitials;
         
-                const displayName = user.nama || 'User';
-                const userPos = user.posisi || '-';
-                const userLoc = user.lokasi || user.region || user.cabang || '';
-                const displayPos = userLoc ? `${userPos} - ${userLoc}` : userPos;
-        
-                // Populate Desktop
-                if (nameEl) nameEl.textContent = displayName;
-                if (posTextEl) posTextEl.textContent = `${userPos} •`;
-                if (locBadgeEl) locBadgeEl.textContent = userLoc ? userLoc.toUpperCase() : '-';
-                if (avatarEl) {
-                    avatarEl.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=4f46e5&color=fff`;
-                }
-        
-                // Populate Mobile Card
-                if (mobileNameEl) mobileNameEl.textContent = displayName;
-                if (mobilePosEl) mobilePosEl.textContent = displayPos;
-                if (mobileAvatarEl) {
-                    mobileAvatarEl.textContent = displayName.charAt(0).toUpperCase();
-                }
+                // Sidebar user info update
+                var sidebarNameEl = document.getElementById('sidebarUserName');
+                var sidebarPosEl = document.getElementById('sidebarUserPosition');
+                var sidebarAvatarEl = document.getElementById('sidebarUserAvatar');
+                
+                if (sidebarNameEl) sidebarNameEl.textContent = displayName;
+                if (sidebarPosEl) sidebarPosEl.textContent = userPos + ' • ' + userRegion;
+                if (sidebarAvatarEl) sidebarAvatarEl.textContent = userInitials;
             }
         
             document.getElementById('mainContentWrapper').style.display = 'block';

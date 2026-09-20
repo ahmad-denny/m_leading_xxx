@@ -1451,14 +1451,25 @@
 		}
 		
 		function performLogout() {
-		    // 1. Hapus session auth yang digunakan oleh Auth Gate di file ini
-		    localStorage.removeItem('mleadingind_auth_nik');
-		    localStorage.removeItem('saved_user_nik'); // Opsional jika digunakan di tempat lain
+		    // Tampilkan dialog konfirmasi
+		    const isConfirmed = confirm('Apakah Anda yakin ingin keluar?');
 		
-		    // 2. Redirect/kembali ke halaman login
-		    window.location.replace('https://bmisumatera.vercel.app/');
-		}
-        
+		    // Jika pengguna menekan tombol "OK", jalankan proses logout
+		    if (isConfirmed) {
+		        // 1. Hapus session auth
+		        localStorage.removeItem('mleadingind_auth_nik');
+		        localStorage.removeItem('saved_user_nik');
+		
+		        // 2. Tutup window/tab
+		        window.close();
+		
+		        // Fallback jika window.close() diblokir oleh browser
+		        setTimeout(() => {
+		            window.location.replace('https://bmisumatera.vercel.app/');
+		        }, 100);
+		    }
+		    // Jika pengguna menekan "Batal", fungsi berhenti dan tidak terjadi apa-apa
+		}        
     </script>
 </body>
 </html>

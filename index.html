@@ -753,7 +753,7 @@
                                 LEADING INDICATOR
                             </h1>
                             <div id="headerSubtitle" style="font-size: 14px; font-weight: normal; color: var(--text-muted); line-height: 1.2;">
-                                Region Sumatera
+                                REGION SUMATERA
                             </div>
                             <i style="margin-top: 12px;"><p id="headerMeta" style="margin: 0;"> -- Juni 2026 | 💼 --</p></i>
                         </div>
@@ -1128,7 +1128,7 @@
             const subtitleEl = document.getElementById('headerSubtitle');
             if (brVal) subtitleEl.innerText = brVal;
             else if (coVal) subtitleEl.innerText = "Co-Branch " + coVal;
-            else subtitleEl.innerText = "Region Sumatera";
+            else subtitleEl.innerText = "REGION SUMATERA";
         }
 
         function formatValue(val, unit, isGrowthType = false, isTarget = false, isGap = false) {
@@ -1263,7 +1263,7 @@
                 const coMap = {};
                 rawData.forEach(d => { const coName = d['co'] || 'Unknown Co'; if (!coMap[coName]) { coMap[coName] = {}; metrics.forEach(m => coMap[coName][m.key] = 0); } metrics.forEach(m => { coMap[coName][m.key] += parseFloat(d[m.key + '_mtd'] || 0); }); });
                 metrics.forEach(m => {
-                    let coData = Object.keys(coMap).map(coName => ({ name: coName, sub: 'Region Sumatera', val: coMap[coName][m.key] }));
+                    let coData = Object.keys(coMap).map(coName => ({ name: coName, sub: 'REGION SUMATERA', val: coMap[coName][m.key] }));
                     coData = coData.filter(item => item.val > 0); coData.sort((a, b) => b.val - a.val); const topN = coData.slice(0, 5);
                     if (topN.length === 0) return;
                     let cardHTML = `<div class="top5-card"><div class="top5-header" title="${m.label}"><i class="fas ${m.icon}"></i> ${m.label}</div><div class="top5-list">`;

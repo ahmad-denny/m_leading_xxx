@@ -19,7 +19,7 @@
             --text-muted: #6c757d;
             --border: #e9ecef;
             --shadow: 0 2px 8px rgba(0,0,0,0.06);
-            --radius: 0px;
+            --radius: 8px;
             --success: #28a745;
             --danger: #dc3545;
             --warning: #ffc107;
@@ -220,7 +220,7 @@
 
         /* DETAILED BREAKDOWN TABLE STYLES */
         .breakdown-container { padding: 0 20px 40px 20px; }
-        .breakdown-card { background: var(--card-bg); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
+        .breakdown-card { background: var(--card-bg); border-radius: none; box-shadow: var(--shadow); overflow: hidden; }
         .breakdown-header { font-weight: bold; padding: 15px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
         .breakdown-title { font-size: 1rem; font-weight: bold; color: var(--text-primary); display: flex; align-items: center; gap: 8px; }
         .table-responsive { overflow-x: auto; width: 100%; -webkit-overflow-scrolling: touch; }

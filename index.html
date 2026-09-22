@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Leading Indicator Dashboard - Bank Muamalat</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=18 sepswap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -546,7 +546,6 @@
         #headerMeta {
             margin-top: 16px;    /* Spasi atas */
             margin-bottom: 16px; /* Spasi bawah */
-			font-size: 11px; font-weight: normal;
         }
         .menu-toggle-btn {
             width: 30px;  /* Disamakan dengan lebar logo (30px) */
@@ -854,11 +853,11 @@
 
     <script>
         const jsonFiles = [
-            { id: 'sep', label: 'Sep', file: 'sept.json', meta: '<i class="fas fa-calendar-alt"> 18 Sep 2026  <i class="fas fa-briefcase"> 22 days' },
-            { id: 'agu', label: 'Agu', file: 'agust.json', meta: '<i class="fas fa-calendar-alt"> 31 Agu 2026  <i class="fas fa-briefcase"> 19 days' },
-            { id: 'jul', label: 'Jul', file: 'juli.json', meta: '<i class="fas fa-calendar-alt"> 31 Jul 2026  <i class="fas fa-briefcase"> 23 days' },            
-            { id: 'jun', label: 'Jun', file: 'juni.json', meta: '<i class="fas fa-calendar-alt"> 30 Jun 2026  <i class="fas fa-briefcase"> 20 days' ,
-            { id: 'mei', label: 'Mei', file: 'mei.json', meta: '<i class="fas fa-calendar-alt"> 29 Mei 2026  <i class="fas fa-briefcase"> 16 days' }            
+            { id: 'sep', label: 'Sep', file: 'sept.json', meta: '<i class="fas fa-calendar-alt"></i> 18 Sep 2026 | <i class="fas fa-briefcase"></i> 22 days' },
+            { id: 'agu', label: 'Agu', file: 'agust.json', meta: '<i class="fas fa-calendar-alt"></i> 31 Agu 2026 | <i class="fas fa-briefcase"></i> 19 days' },
+            { id: 'jul', label: 'Jul', file: 'juli.json', meta: '<i class="fas fa-calendar-alt"></i> 31 Jul 2026 | <i class="fas fa-briefcase"></i> 23 days' },            
+            { id: 'jun', label: 'Jun', file: 'juni.json', meta: '<i class="fas fa-calendar-alt"></i> 30 Jun 2026 | <i class="fas fa-briefcase"></i> 20 days' },
+            { id: 'mei', label: 'Mei', file: 'mei.json', meta: '<i class="fas fa-calendar-alt"></i> 29 Mei 2026 | <i class="fas fa-briefcase"></i> 16 days' }            
         ];
 
         let currentActiveJson = jsonFiles[0]; 

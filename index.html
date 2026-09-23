@@ -749,7 +749,42 @@
         }
         .action-btn:hover { transform: scale(1.08); }
         
-    </style>
+		/* =========================================================
+		   1. UNTUK BROWSER MODERN (Chrome, Edge, Safari, Opera, Firefox baru)
+		   ========================================================= */
+		html, body, .content-scroll {
+		  /* track (latar) - thumb (batang scrollbar) */
+		  scrollbar-color: #592683 #F2ECF7; 
+		  scrollbar-width: thin; /* 'auto' atau 'thin' */
+		}
+		
+		/* =========================================================
+		   2. UNTUK BROWSER CHROME, EDGE, SAFARI (Webkit)
+		   ========================================================= */
+		/* Lebar/ukuran scrollbar */
+		::-webkit-scrollbar {
+		  width: 8px;   /* Lebar scrollbar vertikal */
+		  height: 8px;  /* Tinggi scrollbar horizontal */
+		}
+		
+		/* Latar belakang lintasan scrollbar (Track) */
+		::-webkit-scrollbar-track {
+		  background: #F2ECF7; /* Ungu sangat muda/soft */
+		  border-radius: 4px;
+		}
+		
+		/* Batang scrollbar (Thumb) */
+		::-webkit-scrollbar-thumb {
+		  background: #592683; /* Ungu Bank Muamalat */
+		  border-radius: 4px;
+		}
+		
+		/* Efek saat scrollbar di-hover / disentuh kursor */
+		::-webkit-scrollbar-thumb:hover {
+		  background: #421B63; /* Ungu sedikit lebih gelap saat diklik/hover */
+		}
+		
+	</style>
 </head>
 <body oncontextmenu="return false;" onkeydown="return blockShortcuts(event);" ondragstart="return false;">
 

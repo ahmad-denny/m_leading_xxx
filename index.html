@@ -212,7 +212,7 @@
         .progress-bar { height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; width: 100%; }
         .progress-fill { height: 100%; background: var(--primary); transition: width 0.5s ease; }
         
-        .footer { text-align: center; padding: 10px; font-size: 0.75rem; color: var(--text-muted); margin-top: 3px; }
+        .footer { text-align: center; padding: 5px; font-size: 0.75rem; color: var(--text-muted); margin-top: 3px; }
 
 		/* CONTAINER & CARD STYLES */
 		.breakdown-container { 
@@ -1466,8 +1466,8 @@
             const actionsClone = headerClone.querySelector('.header-actions');
             if(actionsClone) actionsClone.style.display = 'none';
 
-            footerClone.style.marginTop = '10px';
-            footerClone.style.paddingTop = '5px';
+            footerClone.style.marginTop = '15px';
+            footerClone.style.paddingTop = '10px';
             footerClone.style.borderTop = '1px solid ' + getComputedStyle(document.body).getPropertyValue('--border');
 
             captureWrapper.appendChild(headerClone);

@@ -59,33 +59,31 @@
         .main-content { display: none; padding-top: 24px;}
 
         /* Area scroll di bawah header */
-		/* Area scroll di bawah header - DITURUNKAN agar tidak terpotong */
-		.content-scroll {
-		    position: fixed;
-		    top: 170px; /* <--- Diubah dari 150px ke 170px */
-		    left: 0; right: 0; bottom: 0;
-		    overflow-y: auto;
-		    overflow-x: hidden;
-		    -webkit-overflow-scrolling: touch;
-		}
-		
-		/* HEADER FIXED & LEFT ALIGNED */
-		.header { 
-		    background: #ffffff; 
-		    color: var(--text); 
-		    padding: 12px 20px 0 20px; 
-		    position: fixed; 
-		    top: 0; left: 0; right: 0; 
-		    z-index: 100; 
-		    display: flex; 
-		    flex-direction: column; 
-		    align-items: flex-start; 
-		    justify-content: flex-start; 
-		    box-shadow: none; 
-		    border-bottom: 0px solid var(--border);
-		    /* Hapus min-height kaku atau sesuaikan menjadi auto / lebih aman */
-		    min-height: 140px; 
-		}
+        .content-scroll {
+            position: fixed;
+            top: 150px;
+            left: 0; right: 0; bottom: 0;
+            overflow-y: auto;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* HEADER FIXED & LEFT ALIGNED */
+        .header { 
+            background: #ffffff; 
+            color: var(--text); 
+            padding: 10px 20px 0 20px; 
+            position: fixed; 
+            top: 0; left: 0; right: 0; 
+            z-index: 100; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: flex-start; 
+            justify-content: center; 
+            box-shadow: none; 
+            border-bottom: 0px solid var(--border);
+            min-height: 110px; 
+        }
 
         [data-theme="dark"] .header {
             background: var(--card-bg);
@@ -590,7 +588,6 @@
                 padding: 8px 15px 0 15px; 
                 min-height: 100px; 
             }
-			
             .header-content-wrapper {
                 align-items: center; 
             }
@@ -615,7 +612,7 @@
                 height: 30px; 
                 font-size: 0.85rem; 
             }
-            .content-scroll { top: 155px; } 
+            .content-scroll { top: 130px; } 
             .controls { display: none !important; }
             .dashboard-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 0 15px 20px 15px; }
             .breakdown-container { padding: 0 15px 40px 15px; }
@@ -645,14 +642,11 @@
             background-size: 18px;
             padding-right: 30px !important;
         }
-		
-		#headerMeta {
-		    margin-top: 4px !important;   /* <--- Diubah dari 16px menjadi 4px */
-		    margin-bottom: 6px !important; /* <--- Diubah dari 16px menjadi 6px */
-		    font-size: 0.8rem;
-		}
-		
-		.menu-toggle-btn {
+        #headerMeta {
+            margin-top: 16px;
+            margin-bottom: 16px;
+        }
+        .menu-toggle-btn {
             width: 30px;
             height: 30px;
             padding: 0;

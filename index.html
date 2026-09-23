@@ -58,7 +58,7 @@
 
         .main-content { display: none; }
 
-        /* Area scroll di bawah header: scrollbar vertikal jadi mulai di bawah header, bukan menembus header */
+        /* Area scroll di bawah header */
         .content-scroll {
             position: fixed;
             top: 150px;
@@ -68,7 +68,7 @@
             -webkit-overflow-scrolling: touch;
         }
 
-        /* HEADER FIXED & LEFT ALIGNED - WHITE BACKGROUND */
+        /* HEADER FIXED & LEFT ALIGNED */
         .header { 
             background: #ffffff; 
             color: var(--text); 
@@ -131,13 +131,10 @@
             gap: 4px; 
             overflow-x: auto; 
             padding-bottom: 0;
-            
-            /* Sembunyikan scrollbar dan stepper ikon */
-            -ms-overflow-style: none;  /* IE dan Edge lama */
-            scrollbar-width: none;  /* Firefox */
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
         
-        /* Sembunyikan scrollbar untuk Chrome, Safari, dan Opera / Edge Baru */
         .data-tabs-container::-webkit-scrollbar {
             display: none;
             width: 0;
@@ -164,7 +161,6 @@
             color: var(--primary); 
         }
         
-        /* Tab Aktif: Sewarna dengan background bawah (--bg) dan tanpa border-bottom */
         .data-tab-btn.active { 
             padding: 8px 16px; 
             background: var(--bg) !important; 
@@ -175,10 +171,9 @@
             font-weight: bold; 
             position: relative; 
             z-index: 2; 
-            margin-bottom: -1px; /* Menutupi garis border bawah header agar menyatu sempurna */
+            margin-bottom: -1px; 
         }
         
-        /* Menyesuaikan teks tab aktif pada Dark Mode */
         [data-theme="dark"] .data-tab-btn.active { 
             background: var(--bg) !important; 
             color: var(--card-title-light) !important; 
@@ -191,7 +186,7 @@
         [data-theme="dark"] .theme-toggle, [data-theme="dark"] .filter-toggle, [data-theme="dark"] .capture-toggle, [data-theme="dark"] .menu-toggle { color: var(--card-title-light); }
         .filter-toggle.active { background: var(--warning); color: #333; border-color: var(--warning); }
         
-        .controls { display: none; align-items: center; padding: 15px 20px; background: var(--card-bg); margin: -1px 20px 15px 20px; border-radius: 0 0 var(--radius) var(--radius); box-shadow: var(--shadow); gap: 5px; flex-wrap: nowrap; animation: slideDown 0.3s ease; position: relative; z-index: 10; }
+        .controls { display: none; align-items: center; padding: 15px 28px; background: var(--card-bg); margin: -1px 28px 15px 28px; border-radius: 0 0 var(--radius) var(--radius); box-shadow: var(--shadow); gap: 10px; flex-wrap: nowrap; animation: slideDown 0.3s ease; position: relative; z-index: 10; }
         @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 
         .filter-group { display: flex; gap: 10px; flex: 2; min-width: 0; } 
@@ -201,7 +196,8 @@
         .btn-reset { background: var(--warning); color: #333; flex: 1; justify-content: center; } 
         .btn:hover { opacity: 0.9; transform: translateY(-1px); }
 
-        .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 15px; padding: 0 20px 20px 20px; margin-top: -2px; position: relative; z-index: 10; }
+        /* Penambahan Space Kiri & Kanan Grid */
+        .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 15px; padding: 0 28px 20px 28px; margin-top: -2px; position: relative; z-index: 10; }
         .card { background: var(--card-bg); padding: 16px; border-radius: var(--radius); box-shadow: var(--shadow); display: flex; flex-direction: column; }        
         .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
         .card-title { font-size: 0.95rem; font-weight: bold; color: var(--primary); display: flex; align-items: center; gap: 6px; }
@@ -218,32 +214,54 @@
         
         .footer { text-align: center; padding: 10px; font-size: 0.75rem; color: var(--text-muted); margin-top: 3px; }
 
-        /* DETAILED BREAKDOWN TABLE STYLES */
-        .breakdown-container { padding: 0 20px 40px 20px; }
-        .breakdown-card { background: var(--card-bg); border-radius: none; box-shadow: var(--shadow); overflow: hidden; }
+        /* DETAILED BREAKDOWN TABLE STYLES & VERTIKAL SCROLLBAR */
+        .breakdown-container { padding: 0 28px 40px 28px; } /* Penambahan Space Kiri & Kanan */
+        .breakdown-card { background: var(--card-bg); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
         .breakdown-header { font-weight: bold; padding: 15px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
         .breakdown-title { font-size: 1rem; font-weight: bold; color: var(--text-primary); display: flex; align-items: center; gap: 8px; }
-        .table-responsive { overflow-x: auto; width: 100%; -webkit-overflow-scrolling: touch; }
-        .detail-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; white-space: nowrap; table-layout: fixed; }
-        .detail-table th, .detail-table td { padding: 10px 8px; text-align: right; border-bottom: 1px solid var(--border); overflow: hidden; text-overflow: ellipsis; }
-        .detail-table th:nth-child(1), .detail-table td:nth-child(1) { width: 40px; min-width: 40px; }
-        .detail-table th:nth-child(2), .detail-table td:nth-child(2) { width: 100px; min-width: 100px; }
-        .detail-table th:nth-child(3), .detail-table td:nth-child(3) { width: 130px; min-width: 130px; }
-        .detail-table th:nth-child(4), .detail-table td:nth-child(4) { width: 70px; min-width: 70px; }
-        .detail-table th:first-child, .detail-table td:first-child,
-        .detail-table th:nth-child(2), .detail-table td:nth-child(2),
-        .detail-table th:nth-child(3), .detail-table td:nth-child(3),
-        .detail-table th:nth-child(4), .detail-table td:nth-child(4) { text-align: left; position: sticky; background: var(--card-bg); z-index: 10; border-right: 1px solid var(--border); }
-        .detail-table th:first-child, .detail-table td:first-child { left: 0; z-index: 11; }
-        .detail-table th:nth-child(2), .detail-table td:nth-child(2) { left: 40px; z-index: 11; }
-        .detail-table th:nth-child(3), .detail-table td:nth-child(3) { left: 140px; z-index: 11; }
-        .detail-table th:nth-child(4), .detail-table td:nth-child(4) { left: 270px; z-index: 11; border-right: 1px solid var(--border); }
-        .detail-table th { background: var(--bg); color: var(--text-muted); font-weight: 600; position: sticky; top: 0; z-index: 5; }
-        .detail-table tr.total-row { background-color: var(--highlight-bg); font-weight: bold; }
-        .detail-table tr.total-row td:first-child { position: sticky; left: 0; background: var(--highlight-bg); z-index: 11; border-right: 1px solid var(--border); }
-        .detail-table tr.total-row td:nth-child(2) { position: sticky; left: 40px; background: var(--highlight-bg); z-index: 11; border-right: 1px solid var(--border); }
-        .detail-table tr.total-row td:nth-child(3) { position: sticky; left: 140px; background: var(--highlight-bg); z-index: 11; border-right: 1px solid var(--border); text-align: right !important; }
-        .detail-table tr.total-row td:nth-child(4) { position: sticky; left: 270px; background: var(--highlight-bg); z-index: 11; border-right: 1px solid var(--border); }
+        
+        /* Container Scroll Vertikal & Horizontal */
+        .table-responsive { 
+            max-height: 430px; 
+            overflow: auto; 
+            width: 100%; 
+            -webkit-overflow-scrolling: touch; 
+        }
+        
+        .detail-table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 0.8rem; white-space: nowrap; table-layout: fixed; }
+        .detail-table th, .detail-table td { padding: 10px 12px; text-align: right; border-bottom: 1px solid var(--border); overflow: hidden; text-overflow: ellipsis; }
+        .detail-table th:nth-child(1), .detail-table td:nth-child(1) { width: 45px; min-width: 45px; }
+        .detail-table th:nth-child(2), .detail-table td:nth-child(2) { width: 110px; min-width: 110px; }
+        .detail-table th:nth-child(3), .detail-table td:nth-child(3) { width: 140px; min-width: 140px; }
+        .detail-table th:nth-child(4), .detail-table td:nth-child(4) { width: 80px; min-width: 80px; }
+        
+        /* Header Sticky Vertikal (Melayang di Atas) */
+        .detail-table th { background: var(--bg); color: var(--text-muted); font-weight: 600; position: sticky; top: 0; z-index: 12; border-bottom: 2px solid var(--border); }
+
+        /* Kolom Sticky Kiri (Horizontal Sticky) */
+        .detail-table td:first-child,
+        .detail-table td:nth-child(2),
+        .detail-table td:nth-child(3),
+        .detail-table td:nth-child(4) { text-align: left; position: sticky; background: var(--card-bg); z-index: 10; border-right: 1px solid var(--border); }
+
+        /* Header Kolom Sticky Kiri (Sudut Kiri Atas Paling Depan) */
+        .detail-table th:first-child,
+        .detail-table th:nth-child(2),
+        .detail-table th:nth-child(3),
+        .detail-table th:nth-child(4) { text-align: left; position: sticky; top: 0; background: var(--bg); z-index: 15; border-right: 1px solid var(--border); }
+
+        .detail-table th:first-child, .detail-table td:first-child { left: 0; }
+        .detail-table th:nth-child(2), .detail-table td:nth-child(2) { left: 45px; }
+        .detail-table th:nth-child(3), .detail-table td:nth-child(3) { left: 155px; }
+        .detail-table th:nth-child(4), .detail-table td:nth-child(4) { left: 295px; border-right: 1px solid var(--border); }
+
+        /* Baris Total Sticky di Bawah */
+        .detail-table tr.total-row { background-color: var(--highlight-bg); font-weight: bold; position: sticky; bottom: 0; z-index: 11; }
+        .detail-table tr.total-row td { background-color: var(--highlight-bg); border-top: 2px solid var(--border); }
+        .detail-table tr.total-row td:first-child { position: sticky; left: 0; background: var(--highlight-bg); z-index: 13; border-right: 1px solid var(--border); }
+        .detail-table tr.total-row td:nth-child(2) { position: sticky; left: 45px; background: var(--highlight-bg); z-index: 13; border-right: 1px solid var(--border); }
+        .detail-table tr.total-row td:nth-child(3) { position: sticky; left: 155px; background: var(--highlight-bg); z-index: 13; border-right: 1px solid var(--border); text-align: right !important; }
+        .detail-table tr.total-row td:nth-child(4) { position: sticky; left: 295px; background: var(--highlight-bg); z-index: 13; border-right: 1px solid var(--border); }
         .detail-table tr:hover td { background-color: rgba(0,0,0,0.02); }
         [data-theme="dark"] .detail-table tr:hover td { background-color: rgba(255,255,255,0.05); }
 
@@ -515,10 +533,10 @@
             }
             .content-scroll { top: 130px; } 
             .controls { display: none !important; }
-            .dashboard-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 0 10px 20px 10px; }
+            .dashboard-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 0 15px 20px 15px; }
+            .breakdown-container { padding: 0 15px 40px 15px; }
             .card { padding: 12px; }
             .top5-grid-container { grid-template-columns: repeat(2, 1fr); gap: 8px; padding: 10px; }
-            .breakdown-container { display: none !important; }
             .modal-capture-btn { width: 28px; height: 28px; font-size: 0.75rem; margin-bottom: 6px; }
             
             #userInfoChip { display: none !important; }
@@ -541,14 +559,14 @@
             background-repeat: no-repeat;
             background-position: right 10px center;
             background-size: 18px;
-            padding-right: 30px !important; /* Memberi ruang agar teks tidak menutupi panah baru */
+            padding-right: 30px !important;
         }
         #headerMeta {
-            margin-top: 16px;    /* Spasi atas */
-            margin-bottom: 16px; /* Spasi bawah */
+            margin-top: 16px;
+            margin-bottom: 16px;
         }
         .menu-toggle-btn {
-            width: 30px;  /* Disamakan dengan lebar logo (30px) */
+            width: 30px;
             height: 30px;
             padding: 0;
             display: flex;
@@ -561,7 +579,7 @@
             cursor: pointer;
         }        
 
-        /* User Info Chip Styling seperti Gambar */
+        /* User Info Chip Styling */
         #userInfoChip {
             display: flex;
             align-items: center;
@@ -576,12 +594,11 @@
             background-color: var(--border);
         }
         
-        /* Lingkaran Avatar Inisial */
         #userAvatarCircle {
             width: 38px;
             height: 38px;
             border-radius: 50%;
-            background: var(--primary); /* Ungu Bank Muamalat */
+            background: var(--primary);
             color: #ffffff;
             display: flex;
             align-items: center;
@@ -591,7 +608,6 @@
             flex-shrink: 0;
         }
         
-        /* Detail Teks User */
         .user-info-text {
             display: flex;
             flex-direction: column;
@@ -631,7 +647,6 @@
             font-size: 0.6rem;
         }
         
-        /* Badge REGION Green */
         .user-region-badge {
             background-color: #e8f8f0;
             color: #10b981;
@@ -755,10 +770,7 @@
                 <div class="header-left-group">
                     <button class="menu-toggle" onclick="openSidebar()" title="Open Menu" style="display: none;"><i class="fas fa-bars"></i></button>                    
                     <div style="width: 100%; display: flex; align-items: flex-start; gap: 8px;">
-                        <!-- Logo -->
                         <img src="img/BMI.png" alt="Bank Muamalat Logo" class="logo" width="32" height="32">
-                    
-                        <!-- Container Kolom Kanan -->
                         <div style="display: flex; flex-direction: column; align-items: flex-start;">
                             <h1 style="margin: 0; padding: 0; font-size: 16px; font-weight: bold; color: var(--primary); line-height: 1.2;">
                                 LEADING INDICATOR
@@ -774,9 +786,6 @@
                 <div class="header-actions">
                     <button class="capture-toggle" onclick="captureDashboard()" title="Download KPI Snapshot"><i class="fas fa-camera"></i></button>
                     <button class="filter-toggle" onclick="toggleFilterMenu()" title="Show/Hide Filter" style="display: none;"><i class="fas fa-filter" id="filterIcon"></i></button>
-                    <!--
-                    <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Dark/Light Mode"><i class="fas fa-moon" id="themeIcon"></i></button>
-                    -->
 
                     <div id="userInfoChip">
                         <div id="userAvatarCircle">AD</div>
@@ -792,7 +801,6 @@
                     <button class="action-btn logout-btn" id="logout-btn" title="Logout" style="display:none;" aria-label="Logout">
 	                    <i class="fas fa-right-from-bracket"></i>
                     </button>
-                    
                 </div>
             </div>
             <div class="data-tabs-container" id="dataTabsContainer"></div>
@@ -997,7 +1005,6 @@
                 if (regionEl) regionEl.textContent = userRegion.toUpperCase();
                 if (avatarEl) avatarEl.textContent = userInitials;
         
-                // Sidebar user info update
                 var sidebarNameEl = document.getElementById('sidebarUserName');
                 var sidebarPosEl = document.getElementById('sidebarUserPosition');
                 var sidebarAvatarEl = document.getElementById('sidebarUserAvatar');
@@ -1476,21 +1483,15 @@
 		        cancelButtonText: 'Cancel'
 		    }).then((result) => {
 		        if (result.isConfirmed) {
-		            // 1. Hapus session auth
 		            localStorage.removeItem('mleadingind_auth_nik');
 		            localStorage.removeItem('saved_user_nik');
-		
-		            // 2. Tutup window/tab
 		            window.close();
-		
-		            // Fallback jika window.close() diblokir browser
 		            setTimeout(() => {
 		                window.location.replace('https://bmisumatera.vercel.app/');
 		            }, 100);
 		        }
 		    });
 		}
-		
     </script>
 </body>
 </html>

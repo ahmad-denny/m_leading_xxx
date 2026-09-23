@@ -215,55 +215,127 @@
         .footer { text-align: center; padding: 10px; font-size: 0.75rem; color: var(--text-muted); margin-top: 3px; }
 
         /* DETAILED BREAKDOWN TABLE STYLES & VERTIKAL SCROLLBAR */
-        .breakdown-container { padding: 0 28px 40px 28px; } /* Penambahan Space Kiri & Kanan */
-        .breakdown-card { background: var(--card-bg); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
-        .breakdown-header { font-weight: bold; padding: 15px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-        .breakdown-title { font-size: 1rem; font-weight: bold; color: var(--text-primary); display: flex; align-items: center; gap: 8px; }
-        
-        /* Container Scroll Vertikal & Horizontal */
-        .table-responsive { 
-            max-height: 430px; 
-            overflow: auto; 
-            width: 100%; 
-            -webkit-overflow-scrolling: touch; 
-        }
-        
-        .detail-table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 0.8rem; white-space: nowrap; table-layout: fixed; }
-        .detail-table th, .detail-table td { padding: 10px 12px; text-align: right; border-bottom: 1px solid var(--border); overflow: hidden; text-overflow: ellipsis; }
-        .detail-table th:nth-child(1), .detail-table td:nth-child(1) { width: 45px; min-width: 45px; }
-        .detail-table th:nth-child(2), .detail-table td:nth-child(2) { width: 110px; min-width: 110px; }
-        .detail-table th:nth-child(3), .detail-table td:nth-child(3) { width: 140px; min-width: 140px; }
-        .detail-table th:nth-child(4), .detail-table td:nth-child(4) { width: 80px; min-width: 80px; }
-        
-        /* Header Sticky Vertikal (Melayang di Atas) */
-        .detail-table th { background: var(--bg); color: var(--text-muted); font-weight: 600; position: sticky; top: 0; z-index: 12; border-bottom: 2px solid var(--border); }
-
-        /* Kolom Sticky Kiri (Horizontal Sticky) */
-        .detail-table td:first-child,
-        .detail-table td:nth-child(2),
-        .detail-table td:nth-child(3),
-        .detail-table td:nth-child(4) { text-align: left; position: sticky; background: var(--card-bg); z-index: 10; border-right: 1px solid var(--border); }
-
-        /* Header Kolom Sticky Kiri (Sudut Kiri Atas Paling Depan) */
-        .detail-table th:first-child,
-        .detail-table th:nth-child(2),
-        .detail-table th:nth-child(3),
-        .detail-table th:nth-child(4) { text-align: left; position: sticky; top: 0; background: var(--bg); z-index: 15; border-right: 1px solid var(--border); }
-
-        .detail-table th:first-child, .detail-table td:first-child { left: 0; }
-        .detail-table th:nth-child(2), .detail-table td:nth-child(2) { left: 45px; }
-        .detail-table th:nth-child(3), .detail-table td:nth-child(3) { left: 155px; }
-        .detail-table th:nth-child(4), .detail-table td:nth-child(4) { left: 295px; border-right: 1px solid var(--border); }
-
-        /* Baris Total Sticky di Bawah */
-        .detail-table tr.total-row { background-color: var(--highlight-bg); font-weight: bold; position: sticky; bottom: 0; z-index: 11; }
-        .detail-table tr.total-row td { background-color: var(--highlight-bg); border-top: 2px solid var(--border); }
-        .detail-table tr.total-row td:first-child { position: sticky; left: 0; background: var(--highlight-bg); z-index: 13; border-right: 1px solid var(--border); }
-        .detail-table tr.total-row td:nth-child(2) { position: sticky; left: 45px; background: var(--highlight-bg); z-index: 13; border-right: 1px solid var(--border); }
-        .detail-table tr.total-row td:nth-child(3) { position: sticky; left: 155px; background: var(--highlight-bg); z-index: 13; border-right: 1px solid var(--border); text-align: right !important; }
-        .detail-table tr.total-row td:nth-child(4) { position: sticky; left: 295px; background: var(--highlight-bg); z-index: 13; border-right: 1px solid var(--border); }
-        .detail-table tr:hover td { background-color: rgba(0,0,0,0.02); }
-        [data-theme="dark"] .detail-table tr:hover td { background-color: rgba(255,255,255,0.05); }
+		.breakdown-container { padding: 0 28px 40px 28px; }
+		
+		.breakdown-card { 
+		    background: var(--card-bg); 
+		    border-radius: var(--radius); 
+		    box-shadow: var(--shadow); 
+		    overflow: hidden; 
+		}
+		
+		.breakdown-header { 
+		    font-weight: bold; 
+		    padding: 15px 20px; 
+		    border-bottom: 1px solid var(--border); 
+		    display: flex; 
+		    justify-content: space-between; 
+		    align-items: center; 
+		}
+		
+		.breakdown-title { 
+		    font-size: 1rem; 
+		    font-weight: bold; 
+		    color: var(--text-primary); 
+		    display: flex; 
+		    align-items: center; 
+		    gap: 8px; 
+		}
+		
+		/* Container Scroll Vertikal & Horizontal */
+		.table-responsive { 
+		    max-height: 420px; 
+		    overflow: auto; 
+		    width: 100%; 
+		    -webkit-overflow-scrolling: touch; 
+		}
+		
+		.detail-table { 
+		    width: 100%; 
+		    border-collapse: separate; 
+		    border-spacing: 0; 
+		    font-size: 0.8rem; 
+		    white-space: nowrap; 
+		    table-layout: fixed; 
+		}
+		
+		.detail-table th, .detail-table td { 
+		    padding: 10px 12px; 
+		    text-align: right; 
+		    border-bottom: 1px solid var(--border); 
+		    overflow: hidden; 
+		    text-overflow: ellipsis; 
+		}
+		
+		.detail-table th:nth-child(1), .detail-table td:nth-child(1) { width: 45px; min-width: 45px; }
+		.detail-table th:nth-child(2), .detail-table td:nth-child(2) { width: 110px; min-width: 110px; }
+		.detail-table th:nth-child(3), .detail-table td:nth-child(3) { width: 140px; min-width: 140px; }
+		.detail-table th:nth-child(4), .detail-table td:nth-child(4) { width: 80px; min-width: 80px; }
+		
+		/* Header Sticky Vertikal (Melayang tepat di atas saat scroll) */
+		.detail-table th { 
+		    background: var(--bg); 
+		    color: var(--text-muted); 
+		    font-weight: 600; 
+		    position: sticky; 
+		    top: 0; 
+		    z-index: 12; 
+		    border-bottom: 2px solid var(--border); 
+		}
+		
+		/* Kolom Sticky Kiri (Horizontal Sticky) */
+		.detail-table td:first-child,
+		.detail-table td:nth-child(2),
+		.detail-table td:nth-child(3),
+		.detail-table td:nth-child(4) { 
+		    text-align: left; 
+		    position: sticky; 
+		    background: var(--card-bg); 
+		    z-index: 10; 
+		    border-right: 1px solid var(--border); 
+		}
+		
+		/* Header Kolom Sticky Kiri */
+		.detail-table th:first-child,
+		.detail-table th:nth-child(2),
+		.detail-table th:nth-child(3),
+		.detail-table th:nth-child(4) { 
+		    text-align: left; 
+		    position: sticky; 
+		    top: 0; 
+		    background: var(--bg); 
+		    z-index: 15; 
+		    border-right: 1px solid var(--border); 
+		}
+		
+		.detail-table th:first-child, .detail-table td:first-child { left: 0; }
+		.detail-table th:nth-child(2), .detail-table td:nth-child(2) { left: 45px; }
+		.detail-table th:nth-child(3), .detail-table td:nth-child(3) { left: 155px; }
+		.detail-table th:nth-child(4), .detail-table td:nth-child(4) { left: 295px; }
+		
+		/* Baris Total Murni di Paling Bawah (Non-sticky agar tidak menimpa data) */
+		.detail-table tfoot tr { 
+		    background-color: var(--highlight-bg); 
+		    font-weight: bold; 
+		}
+		
+		.detail-table tfoot td { 
+		    background-color: var(--highlight-bg); 
+		    border-top: 2px solid var(--border); 
+		    border-bottom: none;
+		}
+		
+		.detail-table tfoot td:first-child,
+		.detail-table tfoot td:nth-child(2),
+		.detail-table tfoot td:nth-child(3),
+		.detail-table tfoot td:nth-child(4) {
+		    position: sticky;
+		    left: auto;
+		    background-color: var(--highlight-bg);
+		}
+		
+		.detail-table tr:hover td { background-color: rgba(0,0,0,0.02); }
+		[data-theme="dark"] .detail-table tr:hover td { background-color: rgba(255,255,255,0.05); }
 
         /* MODAL & RANKING STYLES */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; justify-content: center; align-items: center; }
@@ -822,21 +894,22 @@
                 </div>        
             </div>
 
-            <div class="breakdown-container" id="breakdownSection" style="display:none;">
-                <div class="breakdown-card">
-                    <div class="breakdown-header">
-                        <span class="breakdown-title"><i class="fas fa-table"></i> Detailed Data Breakdown</span>
-                    </div>
-                    <div class="table-responsive">
-                        <table class="detail-table" id="detailTable">
-                            <thead><tr id="detailTableHead"></tr></thead>
-                            <tbody id="detailTableBody"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+			<div class="breakdown-container" id="breakdownSection" style="display:none;">
+			    <div class="breakdown-card">
+			        <div class="breakdown-header">
+			            <span class="breakdown-title"><i class="fas fa-table"></i> Detailed Data Breakdown</span>
+			        </div>
+			        <div class="table-responsive">
+			            <table class="detail-table" id="detailTable">
+			                <thead><tr id="detailTableHead"></tr></thead>
+			                <tbody id="detailTableBody"></tbody>
+			                <tfoot id="detailTableFoot"></tfoot>
+			            </table>
+			        </div>
+			    </div>
+			</div>
 
-            <div class="footer">Typing, Create, Update, Repeat | Optimized for Mobile & Web | Theme: Light/Dark | RBPM - Region Sumatera</div>
+			<div class="footer">Typing, Create, Update, Repeat | Optimized for Mobile & Web | Theme: Light/Dark | RBPM - Region Sumatera</div>
         </div>
 
         <div id="rankingModal" class="modal-overlay">
@@ -1208,49 +1281,64 @@
             renderDetailTable(data);
         }
 
-        function renderDetailTable(data) {
-            const section = document.getElementById('breakdownSection');
-            const thead = document.getElementById('detailTableHead');
-            const tbody = document.getElementById('detailTableBody');
-            if (!data || data.length === 0) { section.style.display = 'none'; return; }
-            section.style.display = 'block';
-            thead.innerHTML = ''; tbody.innerHTML = '';
-            let headerHTML = '<th>No</th><th>Co-Branch</th><th>Branch</th><th>Type</th>';
-            metrics.forEach(m => { headerHTML += `<th>${m.label}</th>`; });
-            thead.innerHTML = headerHTML;
-            let totals = {}; metrics.forEach(m => totals[m.key] = 0);
-            data.forEach((row, index) => {
-                let rowHTML = `<tr>`;
-                rowHTML += `<td>${index + 1}</td>`;
-                rowHTML += `<td>${row['co'] || '-'}</td>`;
-                rowHTML += `<td>${row['br'] || '-'}</td>`;
-                rowHTML += `<td>${row['tp'] || '-'}</td>`;
-                metrics.forEach(m => {
-                    let val = parseFloat(row[m.key + '_mtd'] || 0); 
-                    totals[m.key] += val; 
-                    const isGrowthType = ['ca', 'sa', 'fu'].includes(m.key);
-                    const isNegGrowth = isGrowthType && val < 0;
-                    const formatted = formatValue(val, m.unit, isGrowthType, false, false);
-                    let colorClass = '';
-                    if (isGrowthType) { colorClass = isNegGrowth ? 'neg' : 'pos'; }
-                    rowHTML += `<td class="metric-val ${colorClass}">${formatted}</td>`;
-                });
-                rowHTML += `</tr>`; 
-                tbody.innerHTML += rowHTML;
-            });
-            let totalRowHTML = `<tr class="total-row">`;
-            totalRowHTML += `<td></td><td></td><td></td><td style="text-align: right;">TOTAL</td>`; 
-            metrics.forEach(m => {
-                const isGrowthType = ['ca', 'sa', 'fu'].includes(m.key);
-                const isNegGrowth = isGrowthType && totals[m.key] < 0;
-                const formatted = formatValue(totals[m.key], m.unit, isGrowthType, false, false);
-                let colorClass = '';
-                if (isGrowthType) { colorClass = isNegGrowth ? 'neg' : 'pos'; }
-                totalRowHTML += `<td class="metric-val ${colorClass}">${formatted}</td>`;
-            });
-            totalRowHTML += `</tr>`; 
-            tbody.innerHTML += totalRowHTML;
-        }
+		function renderDetailTable(data) {
+		    const section = document.getElementById('breakdownSection');
+		    const thead = document.getElementById('detailTableHead');
+		    const tbody = document.getElementById('detailTableBody');
+		    const tfoot = document.getElementById('detailTableFoot');
+		    
+		    if (!data || data.length === 0) { 
+		        section.style.display = 'none'; 
+		        return; 
+		    }
+		    
+		    section.style.display = 'block';
+		    thead.innerHTML = ''; 
+		    tbody.innerHTML = '';
+		    tfoot.innerHTML = '';
+		    
+		    let headerHTML = '<th>No</th><th>Co-Branch</th><th>Branch</th><th>Type</th>';
+		    metrics.forEach(m => { headerHTML += `<th>${m.label}</th>`; });
+		    thead.innerHTML = headerHTML;
+		    
+		    let totals = {}; 
+		    metrics.forEach(m => totals[m.key] = 0);
+		    
+		    // Render Baris Data
+		    data.forEach((row, index) => {
+		        let rowHTML = `<tr>`;
+		        rowHTML += `<td>${index + 1}</td>`;
+		        rowHTML += `<td>${row['co'] || '-'}</td>`;
+		        rowHTML += `<td>${row['br'] || '-'}</td>`;
+		        rowHTML += `<td>${row['tp'] || '-'}</td>`;
+		        metrics.forEach(m => {
+		            let val = parseFloat(row[m.key + '_mtd'] || 0); 
+		            totals[m.key] += val; 
+		            const isGrowthType = ['ca', 'sa', 'fu'].includes(m.key);
+		            const isNegGrowth = isGrowthType && val < 0;
+		            const formatted = formatValue(val, m.unit, isGrowthType, false, false);
+		            let colorClass = '';
+		            if (isGrowthType) { colorClass = isNegGrowth ? 'neg' : 'pos'; }
+		            rowHTML += `<td class="metric-val ${colorClass}">${formatted}</td>`;
+		        });
+		        rowHTML += `</tr>`; 
+		        tbody.innerHTML += rowHTML;
+		    });
+		    
+		    // Render Baris Total di tfoot (Baris Terakhir)
+		    let totalRowHTML = `<tr>`;
+		    totalRowHTML += `<td></td><td></td><td></td><td style="text-align: right; font-weight: bold;">TOTAL</td>`; 
+		    metrics.forEach(m => {
+		        const isGrowthType = ['ca', 'sa', 'fu'].includes(m.key);
+		        const isNegGrowth = isGrowthType && totals[m.key] < 0;
+		        const formatted = formatValue(totals[m.key], m.unit, isGrowthType, false, false);
+		        let colorClass = '';
+		        if (isGrowthType) { colorClass = isNegGrowth ? 'neg' : 'pos'; }
+		        totalRowHTML += `<td class="metric-val ${colorClass}" style="font-weight: bold;">${formatted}</td>`;
+		    });
+		    totalRowHTML += `</tr>`; 
+		    tfoot.innerHTML = totalRowHTML;
+		}
 
         function openRankingModal() { document.getElementById('rankingModal').style.display = 'flex'; document.body.classList.add('modal-open'); setRankingTab('top5branch', document.getElementById('tabTop5Branch')); }
         function closeRankingModal() { document.getElementById('rankingModal').style.display = 'none'; document.body.classList.remove('modal-open'); }

@@ -784,16 +784,6 @@
 		  background: #421B63; /* Ungu sedikit lebih gelap saat diklik/hover */
 		}
 
-		/* Kode untuk merapatkan jarak Tabel/Card ke Footer */
-		.table-responsive, .card {
-		    margin-bottom: 2px !important;
-		}
-		
-		footer, .footer {
-		    margin-top: 2px !important;
-		    padding: 8px 0 !important;
-		}		
-		
 	</style>
 </head>
 <body oncontextmenu="return false;" onkeydown="return blockShortcuts(event);" ondragstart="return false;">
@@ -1476,8 +1466,8 @@
             const actionsClone = headerClone.querySelector('.header-actions');
             if(actionsClone) actionsClone.style.display = 'none';
 
-            footerClone.style.marginTop = '15px';
-            footerClone.style.paddingTop = '10px';
+            footerClone.style.marginTop = '10px';
+            footerClone.style.paddingTop = '5px';
             footerClone.style.borderTop = '1px solid ' + getComputedStyle(document.body).getPropertyValue('--border');
 
             captureWrapper.appendChild(headerClone);

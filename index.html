@@ -214,8 +214,10 @@
         
         .footer { text-align: center; padding: 10px; font-size: 0.75rem; color: var(--text-muted); margin-top: 3px; }
 
-        /* DETAILED BREAKDOWN TABLE STYLES & VERTIKAL SCROLLBAR */
-		.breakdown-container { padding: 0 28px 40px 28px; }
+		/* DETAILED BREAKDOWN CONTAINER */
+		.breakdown-container { 
+		    padding: 0 28px 40px 28px; 
+		}
 		
 		.breakdown-card { 
 		    background: var(--card-bg); 
@@ -242,10 +244,17 @@
 		    gap: 8px; 
 		}
 		
-		/* Container Scroll Vertikal & Horizontal */
+		/* 1. MENGATUR MIKRO-MARGIN / GAP DI KIRI KANAN TABEL */
+		.table-wrapper {
+		    padding: 0 16px 16px 16px; /* Memberikan jarak Kiri & Kanan (16px) dari Border Card */
+		    position: relative;
+		}
+		
+		/* 2. AREA SCROLLBAR DIBAWAH HEADER TABEL */
 		.table-responsive { 
-		    max-height: 420px; 
-		    overflow: auto; 
+		    max-height: 380px; 
+		    overflow-y: auto;  /* Scrollbar Vertikal berada di area ini (di bawah header) */
+		    overflow-x: auto;  /* Scrollbar Horizontal */
 		    width: 100%; 
 		    -webkit-overflow-scrolling: touch; 
 		}
@@ -272,7 +281,7 @@
 		.detail-table th:nth-child(3), .detail-table td:nth-child(3) { width: 140px; min-width: 140px; }
 		.detail-table th:nth-child(4), .detail-table td:nth-child(4) { width: 80px; min-width: 80px; }
 		
-		/* Header Sticky Vertikal (Melayang tepat di atas saat scroll) */
+		/* Sticky Header Tabel */
 		.detail-table th { 
 		    background: var(--bg); 
 		    color: var(--text-muted); 
@@ -283,7 +292,7 @@
 		    border-bottom: 2px solid var(--border); 
 		}
 		
-		/* Kolom Sticky Kiri (Horizontal Sticky) */
+		/* Sticky Kolom Kiri Horizontal */
 		.detail-table td:first-child,
 		.detail-table td:nth-child(2),
 		.detail-table td:nth-child(3),
@@ -313,7 +322,7 @@
 		.detail-table th:nth-child(3), .detail-table td:nth-child(3) { left: 155px; }
 		.detail-table th:nth-child(4), .detail-table td:nth-child(4) { left: 295px; }
 		
-		/* Baris Total Murni di Paling Bawah (Non-sticky agar tidak menimpa data) */
+		/* Baris Total Murni di Paling Bawah (Tidak menimpa data) */
 		.detail-table tfoot tr { 
 		    background-color: var(--highlight-bg); 
 		    font-weight: bold; 
@@ -899,16 +908,19 @@
 			        <div class="breakdown-header">
 			            <span class="breakdown-title"><i class="fas fa-table"></i> Detailed Data Breakdown</span>
 			        </div>
-			        <div class="table-responsive">
-			            <table class="detail-table" id="detailTable">
-			                <thead><tr id="detailTableHead"></tr></thead>
-			                <tbody id="detailTableBody"></tbody>
-			                <tfoot id="detailTableFoot"></tfoot>
-			            </table>
+			        <!-- Wrapper baru untuk memberi padding/jarak kiri & kanan -->
+			        <div class="table-wrapper">
+			            <div class="table-responsive">
+			                <table class="detail-table" id="detailTable">
+			                    <thead><tr id="detailTableHead"></tr></thead>
+			                    <tbody id="detailTableBody"></tbody>
+			                    <tfoot id="detailTableFoot"></tfoot>
+			                </table>
+			            </div>
 			        </div>
 			    </div>
 			</div>
-
+			
 			<div class="footer">Typing, Create, Update, Repeat | Optimized for Mobile & Web | Theme: Light/Dark | RBPM - Region Sumatera</div>
         </div>
 

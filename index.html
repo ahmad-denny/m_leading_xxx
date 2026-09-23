@@ -214,7 +214,7 @@
         
         .footer { text-align: center; padding: 10px; font-size: 0.75rem; color: var(--text-muted); margin-top: 3px; }
 
-		/* DETAILED BREAKDOWN CONTAINER */
+		/* CONTAINER & CARD STYLES */
 		.breakdown-container { 
 		    padding: 0 28px 40px 28px; 
 		}
@@ -244,21 +244,13 @@
 		    gap: 8px; 
 		}
 		
-		/* 1. MENGATUR MIKRO-MARGIN / GAP DI KIRI KANAN TABEL */
+		/* MARGIN KIRI KANAN TABEL DARI BORDER CARD */
 		.table-wrapper {
-		    padding: 0 16px 16px 16px; /* Memberikan jarak Kiri & Kanan (16px) dari Border Card */
+		    padding: 0 16px 16px 16px;
 		    position: relative;
 		}
 		
-		/* 2. AREA SCROLLBAR DIBAWAH HEADER TABEL */
-		.table-responsive { 
-		    max-height: 380px; 
-		    overflow-y: auto;  /* Scrollbar Vertikal berada di area ini (di bawah header) */
-		    overflow-x: auto;  /* Scrollbar Horizontal */
-		    width: 100%; 
-		    -webkit-overflow-scrolling: touch; 
-		}
-		
+		/* SINKRONISASI DASAR TABEL */
 		.detail-table { 
 		    width: 100%; 
 		    border-collapse: separate; 
@@ -276,45 +268,60 @@
 		    text-overflow: ellipsis; 
 		}
 		
+		/* HEADER FIX DI ATAS SCROLLBAR */
+		.table-header-fixed {
+		    overflow: hidden; /* Header tidak ikut scroll vertikal */
+		    border-bottom: 2px solid var(--border);
+		}
+		
+		.table-header-fixed th { 
+		    background: var(--bg); 
+		    color: var(--text-muted); 
+		    font-weight: 600; 
+		}
+		
+		/* AREA SCROLLBAR VERTIKAL (LETAK DIBAWAH HEADER) */
+		.table-responsive { 
+		    max-height: 380px; 
+		    overflow-y: auto;  /* Scrollbar Vertikal dipasang HANYA di area body ini */
+		    overflow-x: auto;  /* Scrollbar Horizontal */
+		    width: 100%; 
+		    -webkit-overflow-scrolling: touch; 
+		}
+		
+		/* UKURAN KOLOM (Wajib sama presisi untuk th dan td) */
 		.detail-table th:nth-child(1), .detail-table td:nth-child(1) { width: 45px; min-width: 45px; }
 		.detail-table th:nth-child(2), .detail-table td:nth-child(2) { width: 110px; min-width: 110px; }
 		.detail-table th:nth-child(3), .detail-table td:nth-child(3) { width: 140px; min-width: 140px; }
 		.detail-table th:nth-child(4), .detail-table td:nth-child(4) { width: 80px; min-width: 80px; }
 		
-		/* Sticky Header Tabel */
-		.detail-table th { 
-		    background: var(--bg); 
-		    color: var(--text-muted); 
-		    font-weight: 600; 
-		    position: sticky; 
-		    top: 0; 
-		    z-index: 12; 
-		    border-bottom: 2px solid var(--border); 
-		}
-		
-		/* Sticky Kolom Kiri Horizontal */
+		/* STICKY HORIZONTAL UNTUK KOLOM PERTAMA (KIRI) */
 		.detail-table td:first-child,
 		.detail-table td:nth-child(2),
 		.detail-table td:nth-child(3),
-		.detail-table td:nth-child(4) { 
-		    text-align: left; 
-		    position: sticky; 
-		    background: var(--card-bg); 
-		    z-index: 10; 
-		    border-right: 1px solid var(--border); 
-		}
-		
-		/* Header Kolom Sticky Kiri */
+		.detail-table td:nth-child(4),
 		.detail-table th:first-child,
 		.detail-table th:nth-child(2),
 		.detail-table th:nth-child(3),
 		.detail-table th:nth-child(4) { 
 		    text-align: left; 
 		    position: sticky; 
-		    top: 0; 
-		    background: var(--bg); 
-		    z-index: 15; 
+		    z-index: 10; 
 		    border-right: 1px solid var(--border); 
+		}
+		
+		.detail-table td:first-child,
+		.detail-table td:nth-child(2),
+		.detail-table td:nth-child(3),
+		.detail-table td:nth-child(4) {
+		    background: var(--card-bg);
+		}
+		
+		.detail-table th:first-child,
+		.detail-table th:nth-child(2),
+		.detail-table th:nth-child(3),
+		.detail-table th:nth-child(4) {
+		    background: var(--bg);
 		}
 		
 		.detail-table th:first-child, .detail-table td:first-child { left: 0; }
@@ -322,7 +329,7 @@
 		.detail-table th:nth-child(3), .detail-table td:nth-child(3) { left: 155px; }
 		.detail-table th:nth-child(4), .detail-table td:nth-child(4) { left: 295px; }
 		
-		/* Baris Total Murni di Paling Bawah (Tidak menimpa data) */
+		/* BARIS TOTAL (TFOOT) DI PALING BAWAH DATA */
 		.detail-table tfoot tr { 
 		    background-color: var(--highlight-bg); 
 		    font-weight: bold; 
@@ -332,15 +339,6 @@
 		    background-color: var(--highlight-bg); 
 		    border-top: 2px solid var(--border); 
 		    border-bottom: none;
-		}
-		
-		.detail-table tfoot td:first-child,
-		.detail-table tfoot td:nth-child(2),
-		.detail-table tfoot td:nth-child(3),
-		.detail-table tfoot td:nth-child(4) {
-		    position: sticky;
-		    left: auto;
-		    background-color: var(--highlight-bg);
 		}
 		
 		.detail-table tr:hover td { background-color: rgba(0,0,0,0.02); }
@@ -908,11 +906,18 @@
 			        <div class="breakdown-header">
 			            <span class="breakdown-title"><i class="fas fa-table"></i> Detailed Data Breakdown</span>
 			        </div>
-			        <!-- Wrapper baru untuk memberi padding/jarak kiri & kanan -->
+			        
 			        <div class="table-wrapper">
+			            <!-- HEADER TABEL (Tetap di atas, di luar area scroll) -->
+			            <div class="table-header-fixed">
+			                <table class="detail-table">
+			                    <thead><tr id="detailTableHead"></tr></thead>
+			                </table>
+			            </div>
+			
+			            <!-- BODY TABEL (Area scrollbar vertikal murni dimulai dari sini) -->
 			            <div class="table-responsive">
 			                <table class="detail-table" id="detailTable">
-			                    <thead><tr id="detailTableHead"></tr></thead>
 			                    <tbody id="detailTableBody"></tbody>
 			                    <tfoot id="detailTableFoot"></tfoot>
 			                </table>

@@ -270,12 +270,8 @@
 		
 		/* HEADER FIX DI ATAS SCROLLBAR */
 		.table-header-fixed {
-		    border-top: 1px solid var(--border, #e0e0e0);
-		    border-left: 1px solid var(--border, #e0e0e0);
-		    border-right: 1px solid var(--border, #e0e0e0);
-		    border-bottom: 2px solid var(--border, #d1d5db); /* Garis bawah header lebih tebal */
-		    border-radius: 6px 6px 0 0; /* Opsional: membuat sudut atas melengkung */
-		    background: var(--bg, #f8f9fa);
+		    overflow: hidden; /* Header tidak ikut scroll vertikal */
+		    border-bottom: 2px solid var(--border);
 		}
 		
 		.table-header-fixed th { 
@@ -285,26 +281,19 @@
 		}
 		
 		/* AREA SCROLLBAR VERTIKAL (LETAK DIBAWAH HEADER) */
-		.table-responsive {
-		    border-left: 1px solid var(--border, #e0e0e0);
-		    border-right: 1px solid var(--border, #e0e0e0);
-		    border-bottom: 1px solid var(--border, #e0e0e0);
-		    border-radius: 0 0 6px 6px; /* Opsional: membuat sudut bawah melengkung */
-		    
+		.table-responsive { 
 		    max-height: 380px; 
-		    overflow-y: auto;  
-		    overflow-x: auto;  
+		    overflow-y: auto;  /* Scrollbar Vertikal dipasang HANYA di area body ini */
+		    overflow-x: auto;  /* Scrollbar Horizontal */
 		    width: 100%; 
+		    -webkit-overflow-scrolling: touch; 
 		}
 		
 		/* UKURAN KOLOM (Wajib sama presisi untuk th dan td) */
-		.detail-table th, .detail-table td { 
-		    padding: 10px 12px; 
-		    text-align: right; 
-		    border-bottom: 1px solid var(--border, #e0e0e0); /* Pastikan garis horizontal ada */
-		    overflow: hidden; 
-		    text-overflow: ellipsis; 
-		}
+		.detail-table th:nth-child(1), .detail-table td:nth-child(1) { width: 45px; min-width: 45px; }
+		.detail-table th:nth-child(2), .detail-table td:nth-child(2) { width: 110px; min-width: 110px; }
+		.detail-table th:nth-child(3), .detail-table td:nth-child(3) { width: 140px; min-width: 140px; }
+		.detail-table th:nth-child(4), .detail-table td:nth-child(4) { width: 80px; min-width: 80px; }
 		
 		/* STICKY HORIZONTAL UNTUK KOLOM PERTAMA (KIRI) */
 		.detail-table td:first-child,
@@ -315,7 +304,10 @@
 		.detail-table th:nth-child(2),
 		.detail-table th:nth-child(3),
 		.detail-table th:nth-child(4) { 
-		    border-right: 1px solid var(--border, #e0e0e0); /* Garis vertikal pemisah kolom sticky */
+		    text-align: left; 
+		    position: sticky; 
+		    z-index: 10; 
+		    border-right: 1px solid var(--border); 
 		}
 		
 		.detail-table td:first-child,

@@ -197,7 +197,17 @@
         .btn:hover { opacity: 0.9; transform: translateY(-1px); }
 
         /* Penambahan Space Kiri & Kanan Grid */
-        .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 15px; padding: 0 28px 20px 28px; margin-top: -2px; position: relative; z-index: 10; }
+        /* KODE BARU */
+		.dashboard-grid { 
+		    display: grid; 
+		    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); 
+		    gap: 15px; 
+		    padding: 0 28px 20px 28px; 
+		    margin-top: -2px; 
+		    margin-bottom: 20px; /* <--- Tambahkan baris ini untuk memberi jarak ke tabel */
+		    position: relative; 
+		    z-index: 10; 
+		}
         .card { background: var(--card-bg); padding: 16px; border-radius: var(--radius); box-shadow: var(--shadow); display: flex; flex-direction: column; }        
         .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
         .card-title { font-size: 0.95rem; font-weight: bold; color: var(--primary); display: flex; align-items: center; gap: 6px; }
@@ -217,7 +227,7 @@
 
 		/* CONTAINER & CARD STYLES */
 		.breakdown-container { 
-		    padding: 0 28px 40px 28px; 
+		    padding: 20px 28px 40px 28px; 
 		}
 		
 		.breakdown-card { 

@@ -1458,7 +1458,7 @@
 
             const headerElement = document.querySelector('.header');
             const dashboardElement = document.getElementById('dashboardContainer');
-            const footerElement = document.querySelector('.footer');
+//            const footerElement = document.querySelector('.footer');
             
             const captureWrapper = document.createElement('div');
             captureWrapper.style.backgroundColor = getComputedStyle(document.body).getPropertyValue('--bg');
@@ -1469,7 +1469,7 @@
             
             const headerClone = headerElement.cloneNode(true);
             const dashClone = dashboardElement.cloneNode(true);
-            const footerClone = footerElement.cloneNode(true);
+//            const footerClone = footerElement.cloneNode(true);
             
             headerClone.style.position = 'relative';
             headerClone.style.top = '0';
@@ -1484,7 +1484,7 @@
 
             captureWrapper.appendChild(headerClone);
             captureWrapper.appendChild(dashClone);
-            captureWrapper.appendChild(footerClone);
+//            captureWrapper.appendChild(footerClone);
             
             captureWrapper.style.position = 'fixed';
             captureWrapper.style.left = '-9999px';

@@ -1415,40 +1415,88 @@
             if (mode === 'top5branch') top5Level = 'branch'; else if (mode === 'top5cobranch') top5Level = 'co';
             renderRanking();
         }
-        function renderRanking() {
-            const thead = document.getElementById('rankingThead'); const tbody = document.getElementById('rankingTableBody');
-            thead.innerHTML = ''; tbody.innerHTML = ''; 
-            let gridContainer = document.getElementById('top5GridContainer');
-            if (!gridContainer) { gridContainer = document.createElement('div'); gridContainer.id = 'top5GridContainer'; gridContainer.className = 'top5-grid-container'; document.querySelector('.table-wrapper').appendChild(gridContainer); }
-            document.querySelector('.ranking-table').style.display = 'none'; gridContainer.style.display = 'grid'; gridContainer.innerHTML = '';
-            if (top5Level === 'branch') {
-                metrics.forEach(m => {
-                    let branchData = rawData.map(d => ({ name: d['br'], sub: d['co'], val: parseFloat(d[m.key + '_mtd'] || 0) }));
-                    branchData = branchData.filter(item => item.val > 0); branchData.sort((a, b) => b.val - a.val); const topN = branchData.slice(0, 5);
-                    if (topN.length === 0) return;
-                    let cardHTML = `<div class="top5-card"><div class="top5-header" title="${m.label}"><i class="fas ${m.icon}"></i> ${m.label}</div><div class="top5-list">`;
-                    topN.forEach((item, idx) => {
-                        const isGrowth = ['ca','sa','fu'].includes(m.key); const formatted = formatValue(item.val, m.unit, isGrowth, false, false);
-                        cardHTML += `<div class="top5-item"><div style="display:flex; align-items:center; overflow:hidden; flex:1; min-width:0;"><span class="top5-rank">${idx+1}</span><span class="top5-name" title="${item.name} (${item.sub})">${item.name}</span></div><span class="top5-val">${formatted}</span></div>`;
-                    });
-                    cardHTML += `</div></div>`; gridContainer.innerHTML += cardHTML;
-                });
-            } else {
-                const coMap = {};
-                rawData.forEach(d => { const coName = d['co'] || 'Unknown Co'; if (!coMap[coName]) { coMap[coName] = {}; metrics.forEach(m => coMap[coName][m.key] = 0); } metrics.forEach(m => { coMap[coName][m.key] += parseFloat(d[m.key + '_mtd'] || 0); }); });
-                metrics.forEach(m => {
-                    let coData = Object.keys(coMap).map(coName => ({ name: coName, sub: 'REGION SUMATERA', val: coMap[coName][m.key] }));
-                    coData = coData.filter(item => item.val > 0); coData.sort((a, b) => b.val - a.val); const topN = coData.slice(0, 5);
-                    if (topN.length === 0) return;
-                    let cardHTML = `<div class="top5-card"><div class="top5-header" title="${m.label}"><i class="fas ${m.icon}"></i> ${m.label}</div><div class="top5-list">`;
-                    topN.forEach((item, idx) => {
-                        const isGrowth = ['ca','sa','fu'].includes(m.key); const formatted = formatValue(item.val, m.unit, isGrowth, false, false);
-                        cardHTML += `<div class="top5-item"><div style="display:flex; align-items:center; overflow:hidden; flex:1; min-width:0;"><span class="top5-rank">${idx+1}</span><span class="top5-name" title="${item.name}">${item.name}</span></div><span class="top5-val">${formatted}</span></div>`;
-                    });
-                    cardHTML += `</div></div>`; gridContainer.innerHTML += cardHTML;
-                });
-            }
-        }
+		function renderRanking() {
+		    const thead = document.getElementById('rankingThead'); 
+		    const tbody = document.getElementById('rankingTableBody');
+		    thead.innerHTML = ''; 
+		    tbody.innerHTML = ''; 
+		
+		    // Targetkan .table-wrapper SPESIFIK di dalam #rankingModal
+		    const rankingWrapper = document.querySelector('#rankingModal .table-wrapper');
+		    let gridContainer = document.getElementById('top5GridContainer');
+		    
+		    if (!gridContainer) { 
+		        gridContainer = document.createElement('div'); 
+		        gridContainer.id = 'top5GridContainer'; 
+		        gridContainer.className = 'top5-grid-container'; 
+		        if (rankingWrapper) rankingWrapper.appendChild(gridContainer); 
+		    }
+		    
+		    const rankingTable = document.querySelector('#rankingModal .ranking-table');
+		    if (rankingTable) rankingTable.style.display = 'none'; 
+		    if (gridContainer) {
+		        gridContainer.style.display = 'grid'; 
+		        gridContainer.innerHTML = '';
+		    }
+		
+		    if (top5Level === 'branch') {
+		        metrics.forEach(m => {
+		            let branchData = rawData.map(d => ({ 
+		                name: d['br'], 
+		                sub: d['co'], 
+		                val: parseFloat(d[m.key + '_mtd'] || 0) 
+		            }));
+		            
+		            // Opsional: Jika ingin tetap menampilkan nilai negatif/0, hapus filter ini atau ganti condition-nya
+		            branchData = branchData.filter(item => !isNaN(item.val) && item.val !== 0); 
+		            branchData.sort((a, b) => b.val - a.val); 
+		            const topN = branchData.slice(0, 5);
+		            
+		            if (topN.length === 0) return;
+		            
+		            let cardHTML = `<div class="top5-card"><div class="top5-header" title="${m.label}"><i class="fas ${m.icon}"></i> ${m.label}</div><div class="top5-list">`;
+		            topN.forEach((item, idx) => {
+		                const isGrowth = ['ca','sa','fu'].includes(m.key); 
+		                const formatted = formatValue(item.val, m.unit, isGrowth, false, false);
+		                cardHTML += `<div class="top5-item"><div style="display:flex; align-items:center; overflow:hidden; flex:1; min-width:0;"><span class="top5-rank">${idx+1}</span><span class="top5-name" title="${item.name} (${item.sub})">${item.name}</span></div><span class="top5-val">${formatted}</span></div>`;
+		            });
+		            cardHTML += `</div></div>`; 
+		            gridContainer.innerHTML += cardHTML;
+		        });
+		    } else {
+		        const coMap = {};
+		        rawData.forEach(d => { 
+		            const coName = d['co'] || 'Unknown Co'; 
+		            if (!coMap[coName]) { 
+		                coMap[coName] = {}; 
+		                metrics.forEach(m => coMap[coName][m.key] = 0); 
+		            } 
+		            metrics.forEach(m => { coMap[coName][m.key] += parseFloat(d[m.key + '_mtd'] || 0); }); 
+		        });
+		        
+		        metrics.forEach(m => {
+		            let coData = Object.keys(coMap).map(coName => ({ 
+		                name: coName, 
+		                sub: 'REGION SUMATERA', 
+		                val: coMap[coName][m.key] 
+		            }));
+		            coData = coData.filter(item => !isNaN(item.val) && item.val !== 0); 
+		            coData.sort((a, b) => b.val - a.val); 
+		            const topN = coData.slice(0, 5);
+		            
+		            if (topN.length === 0) return;
+		            
+		            let cardHTML = `<div class="top5-card"><div class="top5-header" title="${m.label}"><i class="fas ${m.icon}"></i> ${m.label}</div><div class="top5-list">`;
+		            topN.forEach((item, idx) => {
+		                const isGrowth = ['ca','sa','fu'].includes(m.key); 
+		                const formatted = formatValue(item.val, m.unit, isGrowth, false, false);
+		                cardHTML += `<div class="top5-item"><div style="display:flex; align-items:center; overflow:hidden; flex:1; min-width:0;"><span class="top5-rank">${idx+1}</span><span class="top5-name" title="${item.name}">${item.name}</span></div><span class="top5-val">${formatted}</span></div>`;
+		            });
+		            cardHTML += `</div></div>`; 
+		            gridContainer.innerHTML += cardHTML;
+		        });
+		    }
+		}
 
         function captureDashboard() {
             const btn = document.querySelector('.header-actions .capture-toggle');

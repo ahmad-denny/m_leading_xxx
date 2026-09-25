@@ -1166,28 +1166,44 @@
         function applyLoggedUserBranchFilter() {
             if (!loggedUser) return;
 
-            var cabang = (loggedUser.cabang || '').toString().trim();
+            var rawCabang = (loggedUser.cabang || '').toString().trim();
+            var lokasi = (loggedUser.lokasi || '').toString().trim();
             var isAdmin = String(loggedUser.admin).toUpperCase() === 'TRUE';
 
-            if (!cabang || cabang.toUpperCase() === 'REGION' || isAdmin) return;
+            if (isAdmin || rawCabang.toUpperCase() === 'REGION') return;
 
-            const cabangUpper = cabang.toUpperCase();
+            // Nilai "cabang" di user_list.json memakai format "411 - BATAM",
+            // sedangkan field co/br pada data JSON KPI memakai nama tanpa kode ("BATAM").
+            // Buang prefix kode di depan agar bisa dicocokkan.
+            var cabangNoCode = rawCabang.replace(/^\d+\s*-\s*/, '').trim();
 
-            // Coba cocokkan ke level Branch (br) dulu, karena ini yang paling spesifik
-            let brMatch = rawData.find(d => (d['br'] || '').toString().trim().toUpperCase() === cabangUpper);
+            // Susun daftar kandidat nama yang mungkin cocok, urut dari yang paling mungkin akurat
+            var candidates = [lokasi, cabangNoCode, rawCabang]
+                .filter(Boolean)
+                .filter(v => v.toUpperCase() !== 'REGION');
+
+            if (candidates.length === 0) return;
 
             let coVal = '', brVal = '';
-            if (brMatch) {
-                coVal = brMatch['co'] || '';
-                brVal = brMatch['br'] || '';
-            } else {
-                // Fallback: cocokkan ke level Co-Branch (co)
-                let coMatch = rawData.find(d => (d['co'] || '').toString().trim().toUpperCase() === cabangUpper);
-                if (coMatch) coVal = coMatch['co'] || '';
+
+            // 1) Coba cocokkan ke level Branch (br) dulu, karena ini yang paling spesifik
+            for (const cand of candidates) {
+                const candUpper = cand.toUpperCase();
+                const brMatch = rawData.find(d => (d['br'] || '').toString().trim().toUpperCase() === candUpper);
+                if (brMatch) { coVal = brMatch['co'] || ''; brVal = brMatch['br'] || ''; break; }
+            }
+
+            // 2) Fallback: cocokkan ke level Co-Branch (co)
+            if (!coVal) {
+                for (const cand of candidates) {
+                    const candUpper = cand.toUpperCase();
+                    const coMatch = rawData.find(d => (d['co'] || '').toString().trim().toUpperCase() === candUpper);
+                    if (coMatch) { coVal = coMatch['co'] || ''; break; }
+                }
             }
 
             if (!coVal) {
-                console.warn(`Cabang "${cabang}" milik user tidak ditemukan pada data periode ini.`);
+                console.warn(`Cabang "${rawCabang}" milik user tidak ditemukan pada data periode ini.`);
                 return;
             }
 

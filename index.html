@@ -1444,7 +1444,7 @@
 		    // Render Baris Data
 		    data.forEach((row, index) => {
 		        let rowHTML = `<tr>`;
-		        rowHTML += `<td>${index + 1}</td>`;
+//		        rowHTML += `<td>${index + 1}</td>`;
 		        rowHTML += `<td>${row['co'] || '-'}</td>`;
 		        rowHTML += `<td>${row['br'] || '-'}</td>`;
 //		        rowHTML += `<td>${row['tp'] || '-'}</td>`;
@@ -1464,7 +1464,8 @@
 		    
 		    // Render Baris Total di tfoot (Baris Terakhir)
 		    let totalRowHTML = `<tr>`;
-		    totalRowHTML += `<td style="border:none;"></td><td style="border:none;"></td><td style="border:none;"></td><td style="text-align: center; font-weight: bold;">TOTAL</td>`; 
+//		    totalRowHTML += `<td style="border:none;"></td><td style="border:none;"></td><td style="border:none;"></td><td style="text-align: center; font-weight: bold;">TOTAL</td>`; 
+		    totalRowHTML += `<td style="border:none;"></td><td style="text-align: center; font-weight: bold;">TOTAL</td>`; 
 		    metrics.forEach(m => {
 		        const isGrowthType = ['ca', 'sa', 'fu'].includes(m.key);
 		        const isNegGrowth = isGrowthType && totals[m.key] < 0;

@@ -61,7 +61,7 @@
         /* Area scroll di bawah header */
         .content-scroll {
             position: fixed;
-            top: 145px;
+            top: 150px;
             left: 0; right: 0; bottom: 0;
             overflow-y: auto;
             overflow-x: hidden;
@@ -204,7 +204,7 @@
 		    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); 
 		    gap: 15px; 
 		    padding: 0 28px 20px 28px; 
-		    margin-top: 10px; 
+		    margin-top: -2px; 
 		    position: relative; 
 		    z-index: 10; 
 		}
@@ -248,11 +248,9 @@
 		
 		.breakdown-title { 
 		    font-size: 1rem; 
-		    font-weight: semibold; 
-		    text-slate:700;
-			dark:text-slate:200;
+		    font-weight: bold; 
+		    color: var(--text-primary); 
 		    display: flex; 
-			text-transform: uppercase;
 		    align-items: center; 
 		    gap: 8px; 
 		}
@@ -286,17 +284,12 @@
 		    overflow: hidden; /* Header tidak ikut scroll vertikal */
 		    border-bottom: 2px solid var(--border);
 			border-top: 2px solid var(--border);
-		    text-slate:700;
-			dark:text-slate:200;
-		    font-weight: semibold; 
-			text-transform: uppercase;
 		}
 		
 		.table-header-fixed th { 
 		    background: var(--bg); 
 		    color: var(--text-muted); 
-		    font-weight: 600;
-			text-transform: uppercase;
+		    font-weight: 600; 
 		}
 		
 		/* AREA SCROLLBAR VERTIKAL (LETAK DIBAWAH HEADER) */
@@ -309,10 +302,10 @@
 		}
 		
 		/* UKURAN KOLOM (Wajib sama presisi untuk th dan td) */
-		.detail-table th:nth-child(1), .detail-table td:nth-child(1) { width: 110px; min-width: 110px; }
-		.detail-table th:nth-child(2), .detail-table td:nth-child(2) { width: 140px; min-width: 140px; }
-		.detail-table th:nth-child(3), .detail-table td:nth-child(3) { width: 80px; min-width: 80px; }
-/*		.detail-table th:nth-child(4), .detail-table td:nth-child(4) { width: 80px; min-width: 80px; } */
+		.detail-table th:nth-child(1), .detail-table td:nth-child(1) { width: 45px; min-width: 45px; }
+		.detail-table th:nth-child(2), .detail-table td:nth-child(2) { width: 110px; min-width: 110px; }
+		.detail-table th:nth-child(3), .detail-table td:nth-child(3) { width: 140px; min-width: 140px; }
+		.detail-table th:nth-child(4), .detail-table td:nth-child(4) { width: 80px; min-width: 80px; }
 		
 		/* STICKY HORIZONTAL UNTUK KOLOM PERTAMA (KIRI) */
 		.detail-table td:first-child,
@@ -344,10 +337,10 @@
 		    background: var(--bg);
 		}
 		
-		.detail-table th:first-child, .detail-table td:first-child { left: 45; }
-		.detail-table th:nth-child(2), .detail-table td:nth-child(2) { left: 155px; }
-		.detail-table th:nth-child(3), .detail-table td:nth-child(3) { left: 295px; }
-/*		.detail-table th:nth-child(4), .detail-table td:nth-child(4) { left: 295px; } */
+		.detail-table th:first-child, .detail-table td:first-child { left: 0; }
+		.detail-table th:nth-child(2), .detail-table td:nth-child(2) { left: 45px; }
+		.detail-table th:nth-child(3), .detail-table td:nth-child(3) { left: 155px; }
+		.detail-table th:nth-child(4), .detail-table td:nth-child(4) { left: 295px; }
 		
 		/* BARIS TOTAL (TFOOT) DI PALING BAWAH DATA */
 		.detail-table tfoot tr { 
@@ -959,7 +952,7 @@
 			<div class="breakdown-container" id="breakdownSection" style="display:none;">
 			    <div class="breakdown-card">
 			        <div class="breakdown-header">
-			            <span class="breakdown-title">Detailed Breakdown</span>
+			            <span class="breakdown-title"><i class="fas fa-table"></i> Detailed Data Breakdown</span>
 			        </div>
 			        
 			        <div class="table-wrapper">
@@ -1434,8 +1427,7 @@
 		    tbody.innerHTML = '';
 		    tfoot.innerHTML = '';
 		    
-//		    let headerHTML = '<th>No</th><th>Co-Branch</th><th>Branch</th>'; //<th>Type</th>';
-		    let headerHTML = '<th>Co-Branch</th><th>Branch</th>'; //<th>Type</th>';
+		    let headerHTML = '<th>No</th><th>Co-Branch</th><th>Branch</th><th>Type</th>';
 		    metrics.forEach(m => { headerHTML += `<th>${m.label}</th>`; });
 		    thead.innerHTML = headerHTML;
 		    
@@ -1445,10 +1437,10 @@
 		    // Render Baris Data
 		    data.forEach((row, index) => {
 		        let rowHTML = `<tr>`;
-//		        rowHTML += `<td>${index + 1}</td>`;
+		        rowHTML += `<td>${index + 1}</td>`;
 		        rowHTML += `<td>${row['co'] || '-'}</td>`;
 		        rowHTML += `<td>${row['br'] || '-'}</td>`;
-//		        rowHTML += `<td>${row['tp'] || '-'}</td>`;
+		        rowHTML += `<td>${row['tp'] || '-'}</td>`;
 		        metrics.forEach(m => {
 		            let val = parseFloat(row[m.key + '_mtd'] || 0); 
 		            totals[m.key] += val; 
@@ -1465,8 +1457,7 @@
 		    
 		    // Render Baris Total di tfoot (Baris Terakhir)
 		    let totalRowHTML = `<tr>`;
-//		    totalRowHTML += `<td style="border:none;"></td><td style="border:none;"></td><td style="border:none;"></td><td style="text-align: center; font-weight: bold;">TOTAL</td>`; 
-		    totalRowHTML += `<td style="border:none;"></td><td style="text-align: center; font-weight: bold;">TOTAL</td>`; 
+		    totalRowHTML += `<td style="border:none;"></td><td style="border:none;"></td><td style="border:none;"></td><td style="text-align: center; font-weight: bold;">TOTAL</td>`; 
 		    metrics.forEach(m => {
 		        const isGrowthType = ['ca', 'sa', 'fu'].includes(m.key);
 		        const isNegGrowth = isGrowthType && totals[m.key] < 0;

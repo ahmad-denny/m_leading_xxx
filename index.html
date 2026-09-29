@@ -1434,7 +1434,7 @@
 		    tbody.innerHTML = '';
 		    tfoot.innerHTML = '';
 		    
-		    let headerHTML = '<th>No</th><th>Co-Branch</th><th>Branch</th><th>Type</th>';
+		    let headerHTML = '<th>No</th><th>Co-Branch</th><th>Branch</th>'; //<th>Type</th>';
 		    metrics.forEach(m => { headerHTML += `<th>${m.label}</th>`; });
 		    thead.innerHTML = headerHTML;
 		    
@@ -1447,7 +1447,7 @@
 		        rowHTML += `<td>${index + 1}</td>`;
 		        rowHTML += `<td>${row['co'] || '-'}</td>`;
 		        rowHTML += `<td>${row['br'] || '-'}</td>`;
-		        rowHTML += `<td>${row['tp'] || '-'}</td>`;
+//		        rowHTML += `<td>${row['tp'] || '-'}</td>`;
 		        metrics.forEach(m => {
 		            let val = parseFloat(row[m.key + '_mtd'] || 0); 
 		            totals[m.key] += val; 

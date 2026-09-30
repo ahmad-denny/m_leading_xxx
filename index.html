@@ -258,30 +258,20 @@
 		    gap: 8px; 
 		}
 		
-		/* MARGIN KIRI KANAN TABEL DARI BORDER CARD 
+		/* MARGIN KIRI KANAN TABEL DARI BORDER CARD */
 		.table-wrapper {
 		    padding: 0px 16px 16px 16px;
 		    position: relative;
 		}
-		*/
-		.table-wrapper {
-		    border-radius: 10px;
-		    overflow: hidden; /* Memotong sudut tajam pada header/tabel */
-		    border: 1px solid #e5e7eb;
-		    position: relative;
-		    /* PADDING DIHAPUS agar tabel menempel sempurna ke sudut rounded */
-		}		
-
+		
 		/* SINKRONISASI DASAR TABEL */
 		.detail-table { 
 		    width: 100%; 
 		    border-collapse: separate; 
 		    border-spacing: 0; 
-			/*
 		    font-size: 0.8rem; 
 		    white-space: nowrap; 
 		    table-layout: fixed; 
-			*/
 		}
 		
 		.detail-table th, .detail-table td { 
@@ -294,11 +284,11 @@
 		
 		/* HEADER FIX DI ATAS SCROLLBAR */
 		.table-header-fixed {
-		    border-top-left-radius: 10px;
-		    border-top-right-radius: 10px;
-		    overflow: hidden;
-		}		
-
+		    overflow: hidden; /* Header tidak ikut scroll vertikal */
+		    border-bottom: 2px solid var(--border);
+			border-top: 2px solid var(--border);
+		}
+		
 		.table-header-fixed th { 
 		    background: var(--bg); 
 		    color: var(--text-muted); 
@@ -968,16 +958,15 @@
 			            <span class="breakdown-title">Detailed Breakdown</span>
 			        </div>
 			        
-			        <!-- Tambahkan rounded-[10px] dan overflow-hidden di sini -->
-			        <div class="table-wrapper rounded-[10px] overflow-hidden border border-gray-200">
-			            <!-- HEADER TABEL -->
+			        <div class="table-wrapper">
+			            <!-- HEADER TABEL (Tetap di atas, di luar area scroll) -->
 			            <div class="table-header-fixed">
 			                <table class="detail-table">
 			                    <thead><tr id="detailTableHead"></tr></thead>
 			                </table>
 			            </div>
 			
-			            <!-- BODY TABEL -->
+			            <!-- BODY TABEL (Area scrollbar vertikal murni dimulai dari sini) -->
 			            <div class="table-responsive">
 			                <table class="detail-table" id="detailTable">
 			                    <tbody id="detailTableBody"></tbody>

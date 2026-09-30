@@ -290,7 +290,7 @@
 		
 		/* HEADER FIX DI ATAS SCROLLBAR */
 		.table-header-fixed {
-		    overflow: hidden; /* Header tidak ikut scroll vertikal */
+		    overflow: hidden; /* Header tidak ikut scroll vertikal; scroll horizontal disinkronkan via JS */
 		    border-bottom: 2px solid var(--border);
 			border-top: 2px solid var(--border);
 			text-align: left; 
@@ -324,9 +324,10 @@
 
 		
 		/* UKURAN KOLOM (Wajib sama presisi untuk th dan td) */
-		.detail-table th:nth-child(1), .detail-table td:nth-child(1) { width: 45px; min-width: 45px; text-align: center;}
-		.detail-table th:nth-child(2), .detail-table td:nth-child(2) { width: 110px; min-width: 155px; text-align: left;}
-		.detail-table th:nth-child(3), .detail-table td:nth-child(3) { width: 140px; min-width: 350px; text-align: left;}
+		/* Lebar kolom dihitung otomatis lewat JS (fitDetailColumns) berdasarkan lebar data & header */
+		.detail-table th:nth-child(1), .detail-table td:nth-child(1) { text-align: center;}
+		.detail-table th:nth-child(2), .detail-table td:nth-child(2) { text-align: left;}
+		.detail-table th:nth-child(3), .detail-table td:nth-child(3) { text-align: left;}
 /*		.detail-table th:nth-child(4), .detail-table td:nth-child(4) { width: 80px; min-width: 80px; } */
 		
 		/* STICKY HORIZONTAL UNTUK KOLOM PERTAMA (KIRI) */
@@ -364,9 +365,8 @@
 		    background: var(--bg);
 		}
 		
-		.detail-table th:first-child, .detail-table td:first-child { center: 0; }
-		.detail-table th:nth-child(2), .detail-table td:nth-child(2) { left: 155px; }
-		.detail-table th:nth-child(3), .detail-table td:nth-child(3) { left: 350px; }
+		.detail-table th:first-child, .detail-table td:first-child { left: 0; }
+		/* offset sticky kolom 2 & 3 diatur otomatis lewat JS */
 /*		.detail-table th:nth-child(4), .detail-table td:nth-child(4) { left: 295px; }*/
 		
 		/* Hindari border dobel di tepi kiri (sudah ada border dari container) */
@@ -1500,7 +1500,70 @@
 		    });
 		    totalRowHTML += `</tr>`; 
 		    tfoot.innerHTML = totalRowHTML;
+		    fitDetailColumns();
 		}
+
+		// Hitung lebar tiap kolom = lebar teks terpanjang (header/data/total) + padding
+		function fitDetailColumns() {
+		    const headTable = document.querySelector('.table-header-fixed .detail-table');
+		    const bodyTable = document.getElementById('detailTable');
+		    const headRow = document.getElementById('detailTableHead');
+		    if (!headTable || !bodyTable || !headRow || !headRow.cells.length) return;
+		    if (!headTable.offsetParent) return; // section masih tersembunyi
+
+		    const ctx = document.createElement('canvas').getContext('2d');
+		    const fontOf = el => {
+		        const cs = getComputedStyle(el);
+		        return `${cs.fontStyle} ${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
+		    };
+		    const widthOf = el => {
+		        ctx.font = fontOf(el);
+		        const cs = getComputedStyle(el);
+		        return ctx.measureText(el.textContent.trim()).width + parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight);
+		    };
+
+		    const nCols = headRow.cells.length;
+		    const widths = new Array(nCols).fill(0);
+		    for (let i = 0; i < nCols; i++) widths[i] = widthOf(headRow.cells[i]);
+		    bodyTable.querySelectorAll('tr').forEach(tr => {
+		        for (let i = 0; i < nCols && i < tr.cells.length; i++) {
+		            widths[i] = Math.max(widths[i], widthOf(tr.cells[i]));
+		        }
+		    });
+		    const finalW = widths.map(w => Math.ceil(w) + 4); // buffer kecil agar tidak terpotong (...)
+
+		    const applyCols = (table) => {
+		        let cg = table.querySelector('colgroup');
+		        if (cg) cg.remove();
+		        cg = document.createElement('colgroup');
+		        finalW.forEach(w => { const c = document.createElement('col'); c.style.width = w + 'px'; cg.appendChild(c); });
+		        table.insertBefore(cg, table.firstChild);
+		        table.style.minWidth = finalW.reduce((a, b) => a + b, 0) + 'px';
+		    };
+		    applyCols(headTable);
+		    applyCols(bodyTable);
+
+		    // Offset sticky kolom 2 & 3 mengikuti lebar kolom sebelumnya
+		    const left2 = finalW[0], left3 = finalW[0] + finalW[1];
+		    document.querySelectorAll('.detail-table tr').forEach(tr => {
+		        if (tr.cells[0]) tr.cells[0].style.left = '0px';
+		        if (tr.cells[1]) tr.cells[1].style.left = left2 + 'px';
+		        if (tr.cells[2]) tr.cells[2].style.left = left3 + 'px';
+		    });
+
+		    // Sinkronkan header dengan body (lebar scrollbar vertikal & scroll horizontal)
+		    const scroller = document.querySelector('.table-responsive');
+		    const headBox = document.querySelector('.table-header-fixed');
+		    const sbw = scroller.offsetWidth - scroller.clientWidth;
+		    headBox.style.paddingRight = sbw + 'px';
+		    headBox.scrollLeft = scroller.scrollLeft;
+		    if (!scroller._syncBound) {
+		        scroller.addEventListener('scroll', () => { headBox.scrollLeft = scroller.scrollLeft; });
+		        scroller._syncBound = true;
+		    }
+		}
+		window.addEventListener('resize', () => { if (typeof fitDetailColumns === 'function') fitDetailColumns(); });
+		if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => fitDetailColumns());
 
         function openRankingModal() { document.getElementById('rankingModal').style.display = 'flex'; document.body.classList.add('modal-open'); setRankingTab('top5branch', document.getElementById('tabTop5Branch')); }
         function closeRankingModal() { document.getElementById('rankingModal').style.display = 'none'; document.body.classList.remove('modal-open'); }

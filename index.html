@@ -1489,7 +1489,7 @@
 		    // Render Baris Total di tfoot (Baris Terakhir)
 		    let totalRowHTML = `<tr>`;
 //		    totalRowHTML += `<td style="border:none;"></td><td style="border:none;"></td><td style="border:none;"></td><td style="text-align: center; font-weight: bold;border:none;">TOTAL</td>`; 
-		    totalRowHTML += `<td style="border:none;"></td><td style="border:none;"></td><td style="text-align: center; font-weight: bold;border:none;">TOTAL</td>`; 
+		    totalRowHTML += `<td style="border:none;"></td><td style="border:none;"></td><td style="text-align: right; font-weight: bold;border:none;">TOTAL</td>`; 
 		    metrics.forEach(m => {
 		        const isGrowthType = ['ca', 'sa', 'fu'].includes(m.key);
 		        const isNegGrowth = isGrowthType && totals[m.key] < 0;

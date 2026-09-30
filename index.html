@@ -304,7 +304,7 @@
 		    background: var(--bg); 
 		    color: var(--text-muted); 
 		    font-weight: 600; 
-			
+		    text-transform: uppercase;
 		}
 		
 		/* AREA SCROLLBAR VERTIKAL (LETAK DIBAWAH HEADER) */
@@ -1519,7 +1519,9 @@
 		    const widthOf = el => {
 		        ctx.font = fontOf(el);
 		        const cs = getComputedStyle(el);
-		        return ctx.measureText(el.textContent.trim()).width + parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight);
+		        let txt = el.textContent.trim();
+		        if (cs.textTransform === 'uppercase') txt = txt.toUpperCase();
+		        return ctx.measureText(txt).width + parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight);
 		    };
 
 		    const nCols = headRow.cells.length;

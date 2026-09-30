@@ -266,20 +266,22 @@
 		*/
 		.table-wrapper {
 		    border-radius: 10px;
-		    overflow: hidden; /* Penting agar isi tabel tidak keluar dari lekukan sudut */
-		    border: 1px solid #e5e7eb; /* opsional: untuk garis tepi luar tabel */
-			/*padding: 0px 16px 16px 16px;*/
-			position: relative;
+		    overflow: hidden; /* Memotong sudut tajam pada header/tabel */
+		    border: 1px solid #e5e7eb;
+		    position: relative;
+		    /* PADDING DIHAPUS agar tabel menempel sempurna ke sudut rounded */
 		}		
-		
+
 		/* SINKRONISASI DASAR TABEL */
 		.detail-table { 
 		    width: 100%; 
 		    border-collapse: separate; 
 		    border-spacing: 0; 
+			/*
 		    font-size: 0.8rem; 
 		    white-space: nowrap; 
 		    table-layout: fixed; 
+			*/
 		}
 		
 		.detail-table th, .detail-table td { 
@@ -292,11 +294,11 @@
 		
 		/* HEADER FIX DI ATAS SCROLLBAR */
 		.table-header-fixed {
-		    overflow: hidden; /* Header tidak ikut scroll vertikal */
-		    border-bottom: 2px solid var(--border);
-			border-top: 2px solid var(--border);
-		}
-		
+		    border-top-left-radius: 10px;
+		    border-top-right-radius: 10px;
+		    overflow: hidden;
+		}		
+
 		.table-header-fixed th { 
 		    background: var(--bg); 
 		    color: var(--text-muted); 

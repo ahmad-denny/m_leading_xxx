@@ -329,17 +329,18 @@
 		.detail-table th:nth-child(1), .detail-table td:nth-child(1) { width: 45px; min-width: 45px; }
 		.detail-table th:nth-child(2), .detail-table td:nth-child(2) { width: 110px; min-width: 110px; }
 		.detail-table th:nth-child(3), .detail-table td:nth-child(3) { width: 140px; min-width: 140px; }
-		.detail-table th:nth-child(4), .detail-table td:nth-child(4) { width: 80px; min-width: 80px; }
+/*		.detail-table th:nth-child(4), .detail-table td:nth-child(4) { width: 80px; min-width: 80px; } */
 		
 		/* STICKY HORIZONTAL UNTUK KOLOM PERTAMA (KIRI) */
 		.detail-table td:first-child,
 		.detail-table td:nth-child(2),
 		.detail-table td:nth-child(3),
-		.detail-table td:nth-child(4),
+/*		.detail-table td:nth-child(4),*/
 		.detail-table th:first-child,
 		.detail-table th:nth-child(2),
 		.detail-table th:nth-child(3),
-		.detail-table th:nth-child(4) { 
+/*		.detail-table th:nth-child(4) */
+		{ 
 		    text-align: left; 
 		    position: sticky; 
 		    z-index: 10; 
@@ -351,22 +352,24 @@
 		
 		.detail-table td:first-child,
 		.detail-table td:nth-child(2),
-		.detail-table td:nth-child(3),
-		.detail-table td:nth-child(4) {
+		.detail-table td:nth-child(3)
+/*		.detail-table td:nth-child(4) */
+		{
 		    background: var(--card-bg);
 		}
 		
 		.detail-table th:first-child,
 		.detail-table th:nth-child(2),
-		.detail-table th:nth-child(3),
-		.detail-table th:nth-child(4) {
+		.detail-table th:nth-child(3)
+/*		.detail-table th:nth-child(4) */
+		{
 		    background: var(--bg);
 		}
 		
 		.detail-table th:first-child, .detail-table td:first-child { center: 0; }
 		.detail-table th:nth-child(2), .detail-table td:nth-child(2) { left: 45px; }
 		.detail-table th:nth-child(3), .detail-table td:nth-child(3) { left: 155px; }
-		.detail-table th:nth-child(4), .detail-table td:nth-child(4) { left: 295px; }
+/*		.detail-table th:nth-child(4), .detail-table td:nth-child(4) { left: 295px; }*/
 		
 		/* Hindari border dobel di tepi kiri (sudah ada border dari container) */
 		.detail-table th:first-child, .detail-table td:first-child { border-left: 0; }
@@ -1456,7 +1459,8 @@
 		    tbody.innerHTML = '';
 		    tfoot.innerHTML = '';
 		    
-		    let headerHTML = '<th>NO</th><th>CO-BRANCH</th><th>BRANCH</th><th>TYPE</th>';
+//		    let headerHTML = '<th>NO</th><th>CO-BRANCH</th><th>BRANCH</th><th>TYPE</th>';
+		    let headerHTML = '<th>NO</th><th>CO-BRANCH</th><th>BRANCH</th>';
 		    metrics.forEach(m => { headerHTML += `<th>${m.label}</th>`; });
 		    thead.innerHTML = headerHTML;
 		    
@@ -1469,7 +1473,7 @@
 		        rowHTML += `<td>${index + 1}</td>`;
 		        rowHTML += `<td>${row['co'] || '-'}</td>`;
 		        rowHTML += `<td>${row['br'] || '-'}</td>`;
-		        rowHTML += `<td>${row['tp'] || '-'}</td>`;
+//		        rowHTML += `<td>${row['tp'] || '-'}</td>`;
 		        metrics.forEach(m => {
 		            let val = parseFloat(row[m.key + '_mtd'] || 0); 
 		            totals[m.key] += val; 
@@ -1486,7 +1490,8 @@
 		    
 		    // Render Baris Total di tfoot (Baris Terakhir)
 		    let totalRowHTML = `<tr>`;
-		    totalRowHTML += `<td style="border:none;"></td><td style="border:none;"></td><td style="border:none;"></td><td style="text-align: center; font-weight: bold;border:none;">TOTAL</td>`; 
+//		    totalRowHTML += `<td style="border:none;"></td><td style="border:none;"></td><td style="border:none;"></td><td style="text-align: center; font-weight: bold;border:none;">TOTAL</td>`; 
+		    totalRowHTML += `<td style="border:none;"></td><td style="border:none;"></td><td style="text-align: center; font-weight: bold;border:none;">TOTAL</td>`; 
 		    metrics.forEach(m => {
 		        const isGrowthType = ['ca', 'sa', 'fu'].includes(m.key);
 		        const isNegGrowth = isGrowthType && totals[m.key] < 0;

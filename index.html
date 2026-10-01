@@ -385,7 +385,13 @@
 		    background-color: var(--bg); 
 		    border-top: 2px solid var(--border); 
 		    border-bottom: 0; /* sudah ada dari border container */
+		    /* Baris TOTAL di-freeze di bawah area scroll vertikal */
+		    position: sticky;
+		    bottom: 0;
+		    z-index: 11;
 		}
+		/* Tiga kolom pertama di baris total: beku kiri + bawah, di atas sel lain */
+		.detail-table tfoot td:nth-child(-n+3) { z-index: 12; }
 		
 		/* kolom sticky di baris total juga sama dengan warna header */
 		.detail-table tfoot td:first-child,

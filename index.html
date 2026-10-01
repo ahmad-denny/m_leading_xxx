@@ -748,10 +748,10 @@
             .detail-table th:nth-child(n+4) { white-space: normal; line-height: 1.25; vertical-align: middle; }
 
             /* 3. Scrollbar disembunyikan (tabel tetap bisa digeser dengan sentuhan) */
-            .table-responsive, .table-header-fixed, .table-footer-fixed { scrollbar-width: none; -ms-overflow-style: none; }
-            .table-responsive::-webkit-scrollbar,
-            .table-header-fixed::-webkit-scrollbar,
-            .table-footer-fixed::-webkit-scrollbar { display: none; width: 0; height: 0; }
+            .breakdown-card .table-responsive, .breakdown-card .table-header-fixed, .breakdown-card .table-footer-fixed { scrollbar-width: none; -ms-overflow-style: none; }
+            .breakdown-card .table-responsive::-webkit-scrollbar,
+            .breakdown-card .table-header-fixed::-webkit-scrollbar,
+            .breakdown-card .table-footer-fixed::-webkit-scrollbar { display: none; width: 0; height: 0; }
 
             /* 2. Kolom beku (No, Co-Branch, Branch): lebar dibatasi lewat JS, teks panjang wrap */
             .detail-table td { vertical-align: middle; }
@@ -883,7 +883,7 @@
 		/* =========================================================
 		   1. UNTUK BROWSER MODERN (Chrome, Edge, Safari, Opera, Firefox baru)
 		   ========================================================= */
-		html, body, .content-scroll {
+		html, body, .content-scroll, .table-responsive {
 		  /* track (latar) - thumb (batang scrollbar) */
 		  scrollbar-color: #592683 #F2ECF7; 
 		  scrollbar-width: thin; /* 'auto' atau 'thin' */

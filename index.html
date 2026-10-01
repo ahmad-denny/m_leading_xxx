@@ -1787,6 +1787,19 @@
 		document.addEventListener('keydown', e => { if (e.key === 'Escape') closeExportMenu(); });
 
 		// ===== EXPORT KPI LEADING INDICATOR (Gambar / Excel) - menu kamera di header =====
+		function getExcelHeaderRows() {
+		    const subtitle = document.getElementById('headerSubtitle').innerText.trim();
+		    const meta = (document.getElementById('headerMeta').innerText || '').replace(/\s+/g, ' ').trim();
+		    const userName = ((loggedUser && loggedUser.nama) || (document.getElementById('userNameChip') || {}).textContent || '-').toString().trim().toUpperCase();
+		    return [
+		        ['LEADING INDICATOR'],
+		        [subtitle],
+		        [meta],
+		        ['Printed by', userName],
+		        []
+		    ];
+		}
+
 		function exportKpiFromMenu(type) {
 		    closeExportMenu();
 		    if (type === 'image') { captureDashboard(); return; }
@@ -1825,16 +1838,10 @@
 		    }
 		    const rows = getKpiRows();
 		    const subtitle = document.getElementById('headerSubtitle').innerText.trim();
-		    const meta = (document.getElementById('headerMeta').innerText || '').replace(/\s+/g, ' ').trim();
 		    const period = (currentActiveJson && currentActiveJson.label) || '';
-		    const userName = ((loggedUser && loggedUser.nama) || (document.getElementById('userNameChip') || {}).textContent || '-').toString().trim().toUpperCase();
 
 		    const aoa = [
-		        ['LEADING INDICATOR'],
-		        [subtitle],
-		        [meta],
-		        ['Printed by', userName],
-		        [],
+		        ...getExcelHeaderRows(),
 		        ['KPI', 'Tipe', 'MTD', 'MTD Target', 'GAP', 'Jenis GAP', 'Achievement']
 		    ];
 		    const firstDataRow = aoa.length;
@@ -1866,7 +1873,9 @@
 		function exportDetailExcel() {
 		    if (typeof XLSX === 'undefined') { alert('Library Excel belum termuat. Periksa koneksi internet lalu coba lagi.'); return; }
 		    const rows = getSortedDetailData();
-		    const aoa = [['No', 'Co-Branch', 'Branch', ...metrics.map(m => m.label + (m.unit === 'M' ? ' (M)' : ''))]];
+		    const headRows = getExcelHeaderRows();
+		    const aoa = [...headRows, ['No', 'Co-Branch', 'Branch', ...metrics.map(m => m.label + (m.unit === 'M' ? ' (M)' : ''))]];
+		    const dataStart = aoa.length;
 		    const totals = metrics.map(() => 0);
 		    rows.forEach((row, i) => {
 		        const vals = metrics.map((m, j) => { const v = parseFloat(row[m.key + '_mtd'] || 0) || 0; totals[j] += v; return v; });
@@ -1875,7 +1884,7 @@
 		    aoa.push(['', '', 'TOTAL', ...totals]);
 
 		    const ws = XLSX.utils.aoa_to_sheet(aoa);
-		    for (let r = 1; r < aoa.length; r++) {
+		    for (let r = dataStart; r < aoa.length; r++) {
 		        metrics.forEach((m, j) => {
 		            const cell = ws[XLSX.utils.encode_cell({ r, c: 3 + j })];
 		            if (cell) cell.z = m.unit === 'M' ? '#,##0.00' : '#,##0';
@@ -1927,7 +1936,7 @@
 		    headerClone.style.minHeight = '0';
 		    headerClone.style.padding = '10px 0 12px 0';
 		    headerClone.style.marginBottom = '12px';
-//		    headerClone.style.borderBottom = '1px solid ' + getComputedStyle(document.body).getPropertyValue('--border');
+		    headerClone.style.borderBottom = '1px solid ' + getComputedStyle(document.body).getPropertyValue('--border');
 		    // Hilangkan elemen interaktif yang tidak perlu di gambar
 		    headerClone.querySelectorAll('.header-actions, .data-tabs-container, .menu-toggle').forEach(el => el.remove());
 		    const hdrWrapper = headerClone.querySelector('.header-content-wrapper');

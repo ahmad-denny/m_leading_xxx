@@ -1036,7 +1036,7 @@
                 
                 <div class="header-actions">
                     <div class="export-dropdown header-export-dropdown" id="headerExportDropdown">
-                        <button type="button" class="capture-toggle" id="headerExportBtn" onclick="toggleExportMenu(event)" title="Simpan KPI Snapshot"><i class="fas fa-camera"></i></button>
+                        <button type="button" class="capture-toggle" id="headerExportBtn" onclick="toggleExportMenu(event)" title="Save Snapshot KPI"><i class="fas fa-camera"></i></button>
                         <div class="export-menu">
                             <button type="button" class="export-item" onclick="exportKpiFromMenu('image')"><i class="fas fa-image" style="color:#6441A5;"></i><span>Save as Image</span></button>
                             <button type="button" class="export-item" onclick="exportKpiFromMenu('excel')"><i class="fas fa-file-excel" style="color:#1d8348;"></i><span>Save as Excel</span></button>
@@ -1084,7 +1084,7 @@
 			        <div class="breakdown-header">
 			            <span class="breakdown-title">Detailed Breakdown</span>
 			            <div class="export-dropdown" id="exportDropdown">
-			                <button type="button" class="export-btn text-[9px] font-semibold text-white bg-muamalat-600 hover:bg-muamalat-700" id="exportTableBtn" onclick="toggleExportMenu(event)" title="Simpan tabel" >
+			                <button type="button" class="export-btn text-[9px] font-semibold text-white bg-muamalat-600 hover:bg-muamalat-700" id="exportTableBtn" onclick="toggleExportMenu(event)" title="Save the Table" >
 			                    <i class="fas fa-camera"></i> <i class="fas fa-chevron-down export-caret"></i>
 			                </button>
 			                <div class="export-menu" id="exportMenu">
@@ -1769,7 +1769,7 @@
 		    let region = 'Region', period = '';
 		    try { region = document.getElementById('headerSubtitle').innerText.trim().replace(/\s+/g, '_'); } catch (e) {}
 		    try { period = currentActiveJson.label; } catch (e) {}
-		    return `Summary_KPI_${region}${period ? '_' + period : ''}`.replace(/[\\/:*?"<>|]/g, '');
+		    return `Leading_Indicator_${region}${period ? '_' + period : ''}`.replace(/[\\/:*?"<>|]/g, '');
 		}
 
 		function toggleExportMenu(e) {
@@ -1892,7 +1892,7 @@
 		    }
 		    ws['!cols'] = [{ wch: 5 }, { wch: 20 }, { wch: 28 }, ...metrics.map(() => ({ wch: 16 }))];
 		    const wb = XLSX.utils.book_new();
-		    XLSX.utils.book_append_sheet(wb, ws, 'Summary_KPI');
+		    XLSX.utils.book_append_sheet(wb, ws, 'Leading_Indicator');
 		    XLSX.writeFile(wb, getDetailExportName() + '.xlsx');
 		}
 
@@ -2131,7 +2131,7 @@
 
             const regionText = document.getElementById('headerSubtitle').innerText.replace(/\s+/g, '_');
             const dateText = currentActiveJson.label;
-            const fileName = `KPI_${regionText}_${dateText}.png`;
+            const fileName = `Leading_Indicator_${regionText}_${dateText}.png`;
 
             html2canvas(captureWrapper, { scale: 2, useCORS: true, backgroundColor: null, logging: false }).then(canvas => {
                 const link = document.createElement('a');

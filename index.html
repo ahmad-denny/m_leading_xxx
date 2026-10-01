@@ -1842,19 +1842,19 @@
 
 		    const aoa = [
 		        ...getExcelHeaderRows(),
-		        ['KPI', 'Tipe', 'MTD', 'MTD Target', 'GAP', 'Jenis GAP', 'Achievement']
+		        ['No', 'KPI', 'Tipe', 'MTD', 'MTD Target', 'GAP', 'Jenis GAP', 'Achievement']
 		    ];
 		    const firstDataRow = aoa.length;
-		    rows.forEach(r => aoa.push([r.m.label + (r.m.unit === 'M' ? ' (M)' : ''), r.m.type, r.mtd, r.tgt, r.gap, r.gapLabel, r.achv]));
+		    rows.forEach((r, i) => aoa.push([i + 1, r.m.label + (r.m.unit === 'M' ? ' (M)' : ''), r.m.type, r.mtd, r.tgt, r.gap, r.gapLabel, r.achv]));
 
 		    const ws = XLSX.utils.aoa_to_sheet(aoa);
 		    rows.forEach((r, i) => {
 		        const rowIdx = firstDataRow + i;
 		        const numFmt = r.m.unit === 'M' ? '#,##0.00' : '#,##0';
-		        [2, 3, 4].forEach(c => { const cell = ws[XLSX.utils.encode_cell({ r: rowIdx, c })]; if (cell) cell.z = numFmt; });
-		        const a = ws[XLSX.utils.encode_cell({ r: rowIdx, c: 6 })]; if (a) a.z = '0.0%';
+		        [3, 4, 5].forEach(c => { const cell = ws[XLSX.utils.encode_cell({ r: rowIdx, c })]; if (cell) cell.z = numFmt; });
+		        const a = ws[XLSX.utils.encode_cell({ r: rowIdx, c: 7 })]; if (a) a.z = '0.0%';
 		    });
-		    ws['!cols'] = [{ wch: 18 }, { wch: 18 }, { wch: 14 }, { wch: 14 }, { wch: 14 }, { wch: 16 }, { wch: 14 }];
+		    ws['!cols'] = [{ wch: 5 }, { wch: 18 }, { wch: 18 }, { wch: 14 }, { wch: 14 }, { wch: 14 }, { wch: 16 }, { wch: 14 }];
 		    const wb = XLSX.utils.book_new();
 		    XLSX.utils.book_append_sheet(wb, ws, 'Leading_Indicator');
 		    const fileName = ('Summary_Performance_Leading_Indicator_' + subtitle.replace(/\s+/g, '_') + (period ? '_' + period : '')).replace(/[\\/:*?"<>|]/g, '');

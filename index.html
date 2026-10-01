@@ -679,6 +679,25 @@
             }
         }
 
+
+        /* ===== MOBILE: DETAILED BREAKDOWN ===== */
+        @media (max-width: 900px) {
+            /* 1. Font tabel diperkecil (format angka & warna tidak diubah) */
+            .detail-table { font-size: 0.65rem; }
+            .detail-table td.metric-val { font-size: 0.65rem; }
+            .detail-table th, .detail-table td { padding: 8px 6px; }
+
+            /* 4. Header 2 kata di-wrap jadi 2 baris (kolom metrik) */
+            .detail-table th:nth-child(n+4) { white-space: normal; line-height: 1.25; vertical-align: middle; }
+
+            /* 3. Scrollbar bawah (horizontal) disembunyikan, scroll tetap bisa digeser */
+            .table-responsive::-webkit-scrollbar:horizontal { height: 0; display: none; }
+            .table-header-fixed::-webkit-scrollbar { display: none; }
+            @supports not selector(::-webkit-scrollbar) {
+                .table-responsive, .table-header-fixed { scrollbar-width: none; }
+            }
+        }
+
         [data-theme="dark"] .tab-btn { background: rgba(255, 255, 255, 0.08) !important; color: rgba(255, 255, 255, 0.5) !important; border: 1px solid rgba(255, 255, 255, 0.1) !important; }
         [data-theme="dark"] .tab-btn.active { background: #16213e !important; color: #ffffff !important; border: 1px solid #16213e !important; font-weight: bold; }
         select {
@@ -1524,17 +1543,20 @@
 		        const cs = getComputedStyle(el);
 		        return `${cs.fontStyle} ${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
 		    };
-		    const widthOf = el => {
+		    const isMobile = window.matchMedia('(max-width: 900px)').matches;
+		    const widthOf = (el, byLongestWord) => {
 		        ctx.font = fontOf(el);
 		        const cs = getComputedStyle(el);
 		        let txt = el.textContent.trim();
 		        if (cs.textTransform === 'uppercase') txt = txt.toUpperCase();
+		        // Mobile: header metrik boleh wrap 2 baris, jadi lebar kolom = kata terpanjang
+		        if (byLongestWord) txt = txt.split(/\s+/).sort((a, b) => b.length - a.length)[0] || txt;
 		        return ctx.measureText(txt).width + parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight);
 		    };
 
 		    const nCols = headRow.cells.length;
 		    const widths = new Array(nCols).fill(0);
-		    for (let i = 0; i < nCols; i++) widths[i] = widthOf(headRow.cells[i]);
+		    for (let i = 0; i < nCols; i++) widths[i] = widthOf(headRow.cells[i], isMobile && i >= 3);
 		    bodyTable.querySelectorAll('tr').forEach(tr => {
 		        for (let i = 0; i < nCols && i < tr.cells.length; i++) {
 		            widths[i] = Math.max(widths[i], widthOf(tr.cells[i]));

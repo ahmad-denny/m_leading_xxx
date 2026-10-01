@@ -1856,8 +1856,8 @@
 		    });
 		    ws['!cols'] = [{ wch: 18 }, { wch: 18 }, { wch: 14 }, { wch: 14 }, { wch: 14 }, { wch: 16 }, { wch: 14 }];
 		    const wb = XLSX.utils.book_new();
-		    XLSX.utils.book_append_sheet(wb, ws, 'KPI');
-		    const fileName = ('KPI_' + subtitle.replace(/\s+/g, '_') + (period ? '_' + period : '')).replace(/[\\/:*?"<>|]/g, '');
+		    XLSX.utils.book_append_sheet(wb, ws, 'Leading_Indicator');
+		    const fileName = ('Summary_Performance_Leading_Indicator_' + subtitle.replace(/\s+/g, '_') + (period ? '_' + period : '')).replace(/[\\/:*?"<>|]/g, '');
 		    XLSX.writeFile(wb, fileName + '.xlsx');
 		}
 

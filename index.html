@@ -416,6 +416,9 @@
 		    background-image: linear-gradient(rgba(255,255,255,0.05), rgba(255,255,255,0.05));
 		}
 
+		/* Desktop: padding sel dirapatkan otomatis (lewat JS) bila tabel melebihi lebar kontainer */
+		.detail-table.tight th, .detail-table.tight td { padding-left: 7px; padding-right: 7px; }
+
 		/* SORT ICON PADA HEADER LEADING INDICATOR */
 		.detail-table th.sortable { cursor: pointer; user-select: none; -webkit-user-select: none; }
 		.detail-table th.sortable:hover { color: var(--primary); }
@@ -1016,7 +1019,6 @@
                 
                 <div class="header-actions">
                     <button class="capture-toggle" onclick="captureDashboard()" title="Download KPI Snapshot"><i class="fas fa-camera"></i></button>
-                    <button class="capture-toggle" id="exportTableBtn" onclick="openExportTable()" title="Simpan Tabel (Gambar / Excel)"><i class="fas fa-file-export"></i></button>
                     <button class="filter-toggle" onclick="toggleFilterMenu()" title="Show/Hide Filter" style="display: none;"><i class="fas fa-filter" id="filterIcon"></i></button>
 
                     <div id="userInfoChip">
@@ -1058,6 +1060,7 @@
 			    <div class="breakdown-card">
 			        <div class="breakdown-header">
 			            <span class="breakdown-title">Detailed Breakdown</span>
+			            <button class="capture-toggle" id="exportTableBtn" onclick="openExportTable()" title="Simpan Tabel (Gambar / Excel)" style="margin-right:-4px;"><i class="fas fa-file-export"></i></button>
 			        </div>
 			        
 			        <div class="table-wrapper">
@@ -1644,19 +1647,46 @@
 		        if (cs.textTransform === 'uppercase') txt = txt.toUpperCase();
 		        // Mobile: header metrik boleh wrap 2 baris, jadi lebar kolom = kata terpanjang
 		        if (byLongestWord) txt = txt.split(/\s+/).sort((a, b) => b.length - a.length)[0] || txt;
-		        const iconW = el.querySelector && el.querySelector('.sort-icon') ? 16 : 0; // ruang untuk icon sort
+		        const iconW = el.querySelector && el.querySelector('.sort-icon') ? 14 : 0; // ruang untuk icon sort
 		        return ctx.measureText(txt).width + iconW + parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight);
 		    };
 
 		    const nCols = headRow.cells.length;
-		    const widths = new Array(nCols).fill(0);
-		    for (let i = 0; i < nCols; i++) widths[i] = widthOf(headRow.cells[i], isMobile && i >= 3);
-		    [bodyTable, footTable].forEach(t => t && t.querySelectorAll('tr').forEach(tr => {
-		        for (let i = 0; i < nCols && i < tr.cells.length; i++) {
-		            widths[i] = Math.max(widths[i], widthOf(tr.cells[i]));
+		    const measure = () => {
+		        const widths = new Array(nCols).fill(0);
+		        for (let i = 0; i < nCols; i++) widths[i] = widthOf(headRow.cells[i], isMobile && i >= 3);
+		        [bodyTable, footTable].forEach(t => t && t.querySelectorAll('tr').forEach(tr => {
+		            for (let i = 0; i < nCols && i < tr.cells.length; i++) {
+		                widths[i] = Math.max(widths[i], widthOf(tr.cells[i]));
+		            }
+		        }));
+		        return widths.map(w => Math.ceil(w) + 4); // buffer kecil agar tidak terpotong (...)
+		    };
+		    const sumOf = arr => arr.reduce((a, b) => a + b, 0);
+		    const setTight = on => [headTable, bodyTable, footTable].forEach(t => t && t.classList.toggle('tight', on));
+
+		    let finalW = measure();
+
+		    // Desktop: tabel harus muat tanpa scrollbar horizontal.
+		    // Langkah 1: rapatkan padding kiri-kanan sel. Langkah 2: jika masih lebih lebar, kolom Branch/Co-Branch dipersempit (teks dipotong ...).
+		    if (!isMobile) {
+		        const avail = document.querySelector('.table-responsive').clientWidth;
+		        setTight(false);
+		        finalW = measure();
+		        if (sumOf(finalW) > avail) {
+		            setTight(true);
+		            finalW = measure();
+		            let deficit = sumOf(finalW) - avail;
+		            [2, 1].forEach(i => {
+		                if (deficit <= 0) return;
+		                const headMin = Math.ceil(widthOf(headRow.cells[i])) + 4;
+		                const cut = Math.min(deficit, Math.max(finalW[i] - headMin, 0));
+		                finalW[i] -= cut; deficit -= cut;
+		            });
 		        }
-		    }));
-		    const finalW = widths.map(w => Math.ceil(w) + 4); // buffer kecil agar tidak terpotong (...)
+		    } else {
+		        setTight(false);
+		    }
 
 		    // Mobile: kolom beku maksimal ~58% lebar layar agar masih ada ruang untuk menggeser kolom metrik
 		    if (isMobile) {

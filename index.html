@@ -319,9 +319,20 @@
 		    -webkit-overflow-scrolling: touch; 
 			border-left: 1px solid var(--border);
 			border-right: 1px solid var(--border);
-			border-bottom: 1px solid var(--border);
-			border-radius: 0 0 10px 10px; /* sudut bawah tabel */
+			border-bottom: 0;
+			border-radius: 0;
 			box-sizing: border-box;
+		}
+
+		/* BARIS TOTAL: di bawah area scroll, jadi scrollbar vertikal berhenti di atas baris total */
+		.table-footer-fixed {
+		    overflow: hidden;
+		    border-left: 1px solid var(--border);
+		    border-right: 1px solid var(--border);
+		    border-bottom: 1px solid var(--border);
+		    border-radius: 0 0 10px 10px;
+		    background: var(--bg);
+		    box-sizing: border-box;
 		}
 
 		
@@ -385,13 +396,7 @@
 		    background-color: var(--bg); 
 		    border-top: 2px solid var(--border); 
 		    border-bottom: 0; /* sudah ada dari border container */
-		    /* Baris TOTAL di-freeze di bawah area scroll vertikal */
-		    position: sticky;
-		    bottom: 0;
-		    z-index: 11;
 		}
-		/* Tiga kolom pertama di baris total: beku kiri + bawah, di atas sel lain */
-		.detail-table tfoot td:nth-child(-n+3) { z-index: 12; }
 		
 		/* kolom sticky di baris total juga sama dengan warna header */
 		.detail-table tfoot td:first-child,
@@ -410,6 +415,26 @@
 		    background-color: var(--card-bg);
 		    background-image: linear-gradient(rgba(255,255,255,0.05), rgba(255,255,255,0.05));
 		}
+
+		/* SORT ICON PADA HEADER LEADING INDICATOR */
+		.detail-table th.sortable { cursor: pointer; user-select: none; -webkit-user-select: none; }
+		.detail-table th.sortable:hover { color: var(--primary); }
+		.detail-table th .sort-icon { margin-left: 4px; font-size: 0.8em; opacity: 0.35; }
+		.detail-table th.sort-active .sort-icon { opacity: 1; color: var(--primary); }
+		[data-theme="dark"] .detail-table th.sortable:hover,
+		[data-theme="dark"] .detail-table th.sort-active .sort-icon { color: var(--card-title-light); }
+
+		/* TABEL UNTUK EXPORT GAMBAR (dirender di luar layar) */
+		.export-wrap { position: fixed; left: -9999px; top: 0; padding: 16px; background: var(--card-bg); color: var(--text); width: max-content; font-family: inherit; }
+		.export-title { font-weight: bold; font-size: 15px; text-transform: uppercase; margin-bottom: 4px; }
+		.export-sub { font-size: 12px; color: var(--text-muted); margin-bottom: 12px; }
+		.export-table { border-collapse: collapse; font-size: 12px; white-space: nowrap; }
+		.export-table th, .export-table td { padding: 8px 12px; border-bottom: 1px solid var(--border); text-align: left; }
+		.export-table th { background: var(--bg); text-transform: uppercase; border-bottom: 2px solid var(--border); border-top: 2px solid var(--border); }
+		.export-table th:first-child, .export-table td:first-child { text-align: center; }
+		.export-table th:nth-child(n+4), .export-table td:nth-child(n+4) { text-align: right; }
+		.export-table td.metric-val { font-size: 12px; }
+		.export-table tr.export-total td { background: var(--bg); font-weight: bold; border-top: 2px solid var(--border); border-bottom: 0; }
 
         /* MODAL & RANKING STYLES */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; justify-content: center; align-items: center; }
@@ -707,9 +732,10 @@
             .detail-table th:nth-child(n+4) { white-space: normal; line-height: 1.25; vertical-align: middle; }
 
             /* 3. Scrollbar disembunyikan (tabel tetap bisa digeser dengan sentuhan) */
-            .table-responsive, .table-header-fixed { scrollbar-width: none; -ms-overflow-style: none; }
+            .table-responsive, .table-header-fixed, .table-footer-fixed { scrollbar-width: none; -ms-overflow-style: none; }
             .table-responsive::-webkit-scrollbar,
-            .table-header-fixed::-webkit-scrollbar { display: none; width: 0; height: 0; }
+            .table-header-fixed::-webkit-scrollbar,
+            .table-footer-fixed::-webkit-scrollbar { display: none; width: 0; height: 0; }
 
             /* 2. Kolom beku (No, Co-Branch, Branch): lebar dibatasi lewat JS, teks panjang wrap */
             .detail-table td { vertical-align: middle; }
@@ -990,6 +1016,7 @@
                 
                 <div class="header-actions">
                     <button class="capture-toggle" onclick="captureDashboard()" title="Download KPI Snapshot"><i class="fas fa-camera"></i></button>
+                    <button class="capture-toggle" id="exportTableBtn" onclick="openExportTable()" title="Simpan Tabel (Gambar / Excel)"><i class="fas fa-file-export"></i></button>
                     <button class="filter-toggle" onclick="toggleFilterMenu()" title="Show/Hide Filter" style="display: none;"><i class="fas fa-filter" id="filterIcon"></i></button>
 
                     <div id="userInfoChip">
@@ -1045,6 +1072,12 @@
 			            <div class="table-responsive">
 			                <table class="detail-table" id="detailTable">
 			                    <tbody id="detailTableBody"></tbody>
+			                </table>
+			            </div>
+
+			            <!-- BARIS TOTAL (di luar area scroll vertikal, scroll horizontal disinkronkan via JS) -->
+			            <div class="table-footer-fixed">
+			                <table class="detail-table" id="detailFootTable">
 			                    <tfoot id="detailTableFoot"></tfoot>
 			                </table>
 			            </div>
@@ -1489,7 +1522,27 @@
             renderDetailTable(data);
         }
 
+		// State urutan tabel: key metrik + arah ('desc' | 'asc'); key null = urutan asli
+		let detailBaseData = [];
+		let detailSort = { key: null, dir: null };
+
+		function getSortedDetailData() {
+		    const rows = detailBaseData.slice();
+		    if (detailSort.key) {
+		        const k = detailSort.key + '_mtd';
+		        const f = detailSort.dir === 'asc' ? 1 : -1;
+		        rows.sort((a, b) => f * ((parseFloat(a[k]) || 0) - (parseFloat(b[k]) || 0)));
+		    }
+		    return rows;
+		}
+
 		function renderDetailTable(data) {
+		    detailBaseData = data || [];
+		    drawDetailTable();
+		}
+
+		function drawDetailTable() {
+		    const data = getSortedDetailData();
 		    const section = document.getElementById('breakdownSection');
 		    const thead = document.getElementById('detailTableHead');
 		    const tbody = document.getElementById('detailTableBody');
@@ -1507,8 +1560,26 @@
 		    
 //		    let headerHTML = '<th>NO</th><th>CO-BRANCH</th><th>BRANCH</th><th>TYPE</th>';
 		    let headerHTML = '<th>NO</th><th>CO-BRANCH</th><th>BRANCH</th>';
-		    metrics.forEach(m => { headerHTML += `<th>${m.label}</th>`; });
+		    metrics.forEach(m => {
+		        const active = detailSort.key === m.key;
+		        const icon = active ? (detailSort.dir === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort';
+		        headerHTML += `<th class="sortable${active ? ' sort-active' : ''}" data-key="${m.key}" title="Klik untuk mengurutkan">${m.label}<i class="fas ${icon} sort-icon"></i></th>`;
+		    });
 		    thead.innerHTML = headerHTML;
+		    if (!thead._sortBound) {
+		        thead.addEventListener('click', e => {
+		            const th = e.target.closest('th.sortable');
+		            if (!th) return;
+		            const key = th.dataset.key;
+		            if (detailSort.key !== key) detailSort = { key, dir: 'desc' };      // klik 1: terbesar -> terkecil
+		            else if (detailSort.dir === 'desc') detailSort = { key, dir: 'asc' }; // klik 2: terkecil -> terbesar
+		            else detailSort = { key: null, dir: null };                          // klik 3: kembali ke urutan asli
+		            drawDetailTable();
+		            const sc = document.querySelector('.table-responsive');
+		            if (sc) sc.scrollTop = 0;
+		        });
+		        thead._sortBound = true;
+		    }
 		    
 		    let totals = {}; 
 		    metrics.forEach(m => totals[m.key] = 0);
@@ -1555,6 +1626,7 @@
 		function fitDetailColumns() {
 		    const headTable = document.querySelector('.table-header-fixed .detail-table');
 		    const bodyTable = document.getElementById('detailTable');
+		    const footTable = document.getElementById('detailFootTable');
 		    const headRow = document.getElementById('detailTableHead');
 		    if (!headTable || !bodyTable || !headRow || !headRow.cells.length) return;
 		    if (!headTable.offsetParent) return; // section masih tersembunyi
@@ -1572,17 +1644,18 @@
 		        if (cs.textTransform === 'uppercase') txt = txt.toUpperCase();
 		        // Mobile: header metrik boleh wrap 2 baris, jadi lebar kolom = kata terpanjang
 		        if (byLongestWord) txt = txt.split(/\s+/).sort((a, b) => b.length - a.length)[0] || txt;
-		        return ctx.measureText(txt).width + parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight);
+		        const iconW = el.querySelector && el.querySelector('.sort-icon') ? 16 : 0; // ruang untuk icon sort
+		        return ctx.measureText(txt).width + iconW + parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight);
 		    };
 
 		    const nCols = headRow.cells.length;
 		    const widths = new Array(nCols).fill(0);
 		    for (let i = 0; i < nCols; i++) widths[i] = widthOf(headRow.cells[i], isMobile && i >= 3);
-		    bodyTable.querySelectorAll('tr').forEach(tr => {
+		    [bodyTable, footTable].forEach(t => t && t.querySelectorAll('tr').forEach(tr => {
 		        for (let i = 0; i < nCols && i < tr.cells.length; i++) {
 		            widths[i] = Math.max(widths[i], widthOf(tr.cells[i]));
 		        }
-		    });
+		    }));
 		    const finalW = widths.map(w => Math.ceil(w) + 4); // buffer kecil agar tidak terpotong (...)
 
 		    // Mobile: kolom beku maksimal ~58% lebar layar agar masih ada ruang untuk menggeser kolom metrik
@@ -1605,6 +1678,7 @@
 		    };
 		    applyCols(headTable);
 		    applyCols(bodyTable);
+		    if (footTable) applyCols(footTable);
 
 		    // Offset sticky kolom 2 & 3 mengikuti lebar kolom sebelumnya
 		    const left2 = finalW[0], left3 = finalW[0] + finalW[1];
@@ -1617,14 +1691,125 @@
 		    // Sinkronkan header dengan body (lebar scrollbar vertikal & scroll horizontal)
 		    const scroller = document.querySelector('.table-responsive');
 		    const headBox = document.querySelector('.table-header-fixed');
+		    const footBox = document.querySelector('.table-footer-fixed');
 		    const sbw = scroller.offsetWidth - scroller.clientWidth;
 		    headBox.style.paddingRight = sbw + 'px';
+		    footBox.style.paddingRight = sbw + 'px';
 		    headBox.scrollLeft = scroller.scrollLeft;
+		    footBox.scrollLeft = scroller.scrollLeft;
 		    if (!scroller._syncBound) {
-		        scroller.addEventListener('scroll', () => { headBox.scrollLeft = scroller.scrollLeft; });
+		        scroller.addEventListener('scroll', () => { headBox.scrollLeft = scroller.scrollLeft; footBox.scrollLeft = scroller.scrollLeft; });
 		        scroller._syncBound = true;
 		    }
 		}
+
+		// ===== EXPORT TABEL DETAILED BREAKDOWN (Gambar / Excel) =====
+		function getDetailExportName() {
+		    let region = 'Region', period = '';
+		    try { region = document.getElementById('headerSubtitle').innerText.trim().replace(/\s+/g, '_'); } catch (e) {}
+		    try { period = currentActiveJson.label; } catch (e) {}
+		    return `Breakdown_${region}${period ? '_' + period : ''}`.replace(/[\\/:*?"<>|]/g, '');
+		}
+
+		function openExportTable() {
+		    if (!detailBaseData.length) {
+		        Swal.fire({ icon: 'info', title: 'Tidak ada data', text: 'Tabel Detailed Breakdown masih kosong.', confirmButtonColor: '#6441A5' });
+		        return;
+		    }
+		    Swal.fire({
+		        title: 'Simpan Tabel',
+		        text: 'Detailed Breakdown (sesuai filter & urutan saat ini)',
+		        showDenyButton: true,
+		        showCancelButton: true,
+		        confirmButtonText: '<i class="fas fa-image"></i> Gambar (PNG)',
+		        denyButtonText: '<i class="fas fa-file-excel"></i> Excel (.xlsx)',
+		        cancelButtonText: 'Batal',
+		        confirmButtonColor: '#6441A5',
+		        denyButtonColor: '#1d8348'
+		    }).then(r => {
+		        if (r.isConfirmed) exportDetailImage();
+		        else if (r.isDenied) exportDetailExcel();
+		    });
+		}
+
+		function exportDetailExcel() {
+		    if (typeof XLSX === 'undefined') { alert('Library Excel belum termuat. Periksa koneksi internet lalu coba lagi.'); return; }
+		    const rows = getSortedDetailData();
+		    const aoa = [['No', 'Co-Branch', 'Branch', ...metrics.map(m => m.label + (m.unit === 'M' ? ' (M)' : ''))]];
+		    const totals = metrics.map(() => 0);
+		    rows.forEach((row, i) => {
+		        const vals = metrics.map((m, j) => { const v = parseFloat(row[m.key + '_mtd'] || 0) || 0; totals[j] += v; return v; });
+		        aoa.push([i + 1, row['co'] || '-', row['br'] || '-', ...vals]);
+		    });
+		    aoa.push(['', '', 'TOTAL', ...totals]);
+
+		    const ws = XLSX.utils.aoa_to_sheet(aoa);
+		    for (let r = 1; r < aoa.length; r++) {
+		        metrics.forEach((m, j) => {
+		            const cell = ws[XLSX.utils.encode_cell({ r, c: 3 + j })];
+		            if (cell) cell.z = m.unit === 'M' ? '#,##0.00' : '#,##0';
+		        });
+		    }
+		    ws['!cols'] = [{ wch: 5 }, { wch: 20 }, { wch: 28 }, ...metrics.map(() => ({ wch: 16 }))];
+		    const wb = XLSX.utils.book_new();
+		    XLSX.utils.book_append_sheet(wb, ws, 'Breakdown');
+		    XLSX.writeFile(wb, getDetailExportName() + '.xlsx');
+		}
+
+		function exportDetailImage() {
+		    const btn = document.getElementById('exportTableBtn');
+		    const originalIcon = btn ? btn.innerHTML : '';
+		    if (btn) { btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>'; btn.disabled = true; }
+		    const restore = () => { if (btn) { btn.innerHTML = originalIcon; btn.disabled = false; } };
+
+		    // Susun tabel statis berisi SEMUA baris (tidak terpotong area scroll), disalin dari tabel yang tampil
+		    const wrap = document.createElement('div');
+		    wrap.className = 'export-wrap';
+		    let subtitle = '';
+		    try { subtitle = document.getElementById('headerSubtitle').innerText.trim() + (currentActiveJson.label ? ' | ' + currentActiveJson.label : ''); } catch (e) {}
+		    wrap.innerHTML = '<div class="export-title">Detailed Breakdown</div><div class="export-sub">' + subtitle + '</div>';
+
+		    const table = document.createElement('table');
+		    table.className = 'export-table';
+		    const copyRow = (srcTr, cellTag, extraClass) => {
+		        const tr = document.createElement('tr');
+		        if (extraClass) tr.className = extraClass;
+		        Array.from(srcTr.cells).forEach(c => {
+		            const el = document.createElement(cellTag);
+		            el.textContent = c.textContent.trim();
+		            const cls = Array.from(c.classList).filter(x => x === 'metric-val' || x === 'pos' || x === 'neg').join(' ');
+		            if (cls) el.className = cls;
+		            if (c.textContent.trim() === 'TOTAL') el.style.textAlign = 'center';
+		            tr.appendChild(el);
+		        });
+		        return tr;
+		    };
+		    const thead = document.createElement('thead');
+		    thead.appendChild(copyRow(document.getElementById('detailTableHead'), 'th'));
+		    const tbody = document.createElement('tbody');
+		    document.querySelectorAll('#detailTableBody tr').forEach(tr => tbody.appendChild(copyRow(tr, 'td')));
+		    const footTr = document.querySelector('#detailTableFoot tr');
+		    if (footTr) tbody.appendChild(copyRow(footTr, 'td', 'export-total'));
+		    table.appendChild(thead);
+		    table.appendChild(tbody);
+		    wrap.appendChild(table);
+		    document.body.appendChild(wrap);
+
+		    html2canvas(wrap, { scale: 2, useCORS: true, backgroundColor: null, logging: false }).then(canvas => {
+		        const link = document.createElement('a');
+		        link.download = getDetailExportName() + '.png';
+		        link.href = canvas.toDataURL('image/png');
+		        link.click();
+		        document.body.removeChild(wrap);
+		        restore();
+		    }).catch(err => {
+		        console.error('Export image failed:', err);
+		        alert('Gagal menyimpan tabel sebagai gambar.');
+		        if (wrap.parentNode) document.body.removeChild(wrap);
+		        restore();
+		    });
+		}
+
 		window.addEventListener('resize', () => { if (typeof fitDetailColumns === 'function') fitDetailColumns(); });
 		if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => fitDetailColumns());
 

@@ -690,12 +690,17 @@
             /* 4. Header 2 kata di-wrap jadi 2 baris (kolom metrik) */
             .detail-table th:nth-child(n+4) { white-space: normal; line-height: 1.25; vertical-align: middle; }
 
-            /* 3. Scrollbar bawah (horizontal) disembunyikan, scroll tetap bisa digeser */
-            .table-responsive::-webkit-scrollbar:horizontal { height: 0; display: none; }
-            .table-header-fixed::-webkit-scrollbar { display: none; }
-            @supports not selector(::-webkit-scrollbar) {
-                .table-responsive, .table-header-fixed { scrollbar-width: none; }
+            /* 3. Scrollbar disembunyikan (tabel tetap bisa digeser dengan sentuhan) */
+            .table-responsive, .table-header-fixed { scrollbar-width: none; -ms-overflow-style: none; }
+            .table-responsive::-webkit-scrollbar,
+            .table-header-fixed::-webkit-scrollbar { display: none; width: 0; height: 0; }
+
+            /* 2. Kolom beku (No, Co-Branch, Branch): lebar dibatasi lewat JS, teks panjang wrap */
+            .detail-table td { vertical-align: middle; }
+            .detail-table td:nth-child(2), .detail-table td:nth-child(3) {
+                white-space: normal; line-height: 1.25; overflow-wrap: break-word;
             }
+            .detail-table th:nth-child(3), .detail-table td:nth-child(3) { border-right: 1px solid var(--border); }
         }
 
         [data-theme="dark"] .tab-btn { background: rgba(255, 255, 255, 0.08) !important; color: rgba(255, 255, 255, 0.5) !important; border: 1px solid rgba(255, 255, 255, 0.1) !important; }
@@ -1563,6 +1568,16 @@
 		        }
 		    });
 		    const finalW = widths.map(w => Math.ceil(w) + 4); // buffer kecil agar tidak terpotong (...)
+
+		    // Mobile: kolom beku maksimal ~58% lebar layar agar masih ada ruang untuk menggeser kolom metrik
+		    if (isMobile) {
+		        const scr = document.querySelector('.table-responsive');
+		        const remain = Math.max(scr.clientWidth * 0.58 - finalW[0], 120);
+		        [1, 2].forEach(i => {
+		            const headMin = Math.ceil(widthOf(headRow.cells[i])) + 4;
+		            finalW[i] = Math.min(finalW[i], Math.max(Math.floor(remain / 2), headMin));
+		        });
+		    }
 
 		    const applyCols = (table) => {
 		        let cg = table.querySelector('colgroup');

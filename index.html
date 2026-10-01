@@ -1887,6 +1887,21 @@
 		    XLSX.writeFile(wb, getDetailExportName() + '.xlsx');
 		}
 
+		function createPrintedByEl() {
+		    const userName = ((loggedUser && loggedUser.nama) || (document.getElementById('userNameChip') || {}).textContent || '-').toString().trim().toUpperCase();
+		    const box = document.createElement('div');
+		    box.className = 'export-printed-by';
+		    const lbl = document.createElement('span');
+		    lbl.className = 'export-printed-label';
+		    lbl.textContent = 'Printed by';
+		    const nm = document.createElement('span');
+		    nm.className = 'export-printed-name';
+		    nm.textContent = userName;
+		    box.appendChild(lbl);
+		    box.appendChild(nm);
+		    return box;
+		}
+
 		function exportDetailImage() {
 		    const btn = document.getElementById('exportTableBtn');
 		    const originalIcon = btn ? btn.innerHTML : '';
@@ -1912,25 +1927,10 @@
 		    const hdrWrapper = headerClone.querySelector('.header-content-wrapper');
 		    if (hdrWrapper) {
 		        hdrWrapper.style.paddingRight = '0';
-		        const printedBy = document.createElement('div');
-		        printedBy.className = 'export-printed-by';
-		        const userName = ((loggedUser && loggedUser.nama) || (document.getElementById('userNameChip') || {}).textContent || '-').toString().trim().toUpperCase();
-		        const lbl = document.createElement('span');
-		        lbl.className = 'export-printed-label';
-		        lbl.textContent = 'Printed by';
-		        const nm = document.createElement('span');
-		        nm.className = 'export-printed-name';
-		        nm.textContent = userName;
-		        printedBy.appendChild(lbl);
-		        printedBy.appendChild(nm);
+		        const printedBy = createPrintedByEl();
 		        hdrWrapper.appendChild(printedBy);
 		    }
 		    wrap.appendChild(headerClone);
-		    const titleEl = document.createElement('div');
-		    titleEl.className = 'export-title';
-		    titleEl.style.marginBottom = '12px';
-		    titleEl.textContent = 'Detailed Breakdown';
-		    wrap.appendChild(titleEl);
 
 		    const table = document.createElement('table');
 		    table.className = 'export-table';
@@ -2095,6 +2095,11 @@
             headerClone.style.borderRadius = '8px';
             const actionsClone = headerClone.querySelector('.header-actions');
             if(actionsClone) actionsClone.style.display = 'none';
+            headerClone.querySelectorAll('.data-tabs-container').forEach(el => el.remove());
+            headerClone.style.minHeight = '0';
+            headerClone.style.paddingBottom = '12px';
+            const hdrWrapperClone = headerClone.querySelector('.header-content-wrapper');
+            if (hdrWrapperClone) hdrWrapperClone.appendChild(createPrintedByEl());
 
 //            footerClone.style.marginTop = '15px';
 //            footerClone.style.paddingTop = '10px';

@@ -1769,7 +1769,7 @@
 		    let region = 'Region', period = '';
 		    try { region = document.getElementById('headerSubtitle').innerText.trim().replace(/\s+/g, '_'); } catch (e) {}
 		    try { period = currentActiveJson.label; } catch (e) {}
-		    return `Leading_Indicator_${region}${period ? '_' + period : ''}`.replace(/[\\/:*?"<>|]/g, '');
+		    return `Summary_Leading_Indicator_${region}${period ? '_' + period : ''}`.replace(/[\\/:*?"<>|]/g, '');
 		}
 
 		function toggleExportMenu(e) {
@@ -2131,7 +2131,7 @@
 
             const regionText = document.getElementById('headerSubtitle').innerText.replace(/\s+/g, '_');
             const dateText = currentActiveJson.label;
-            const fileName = `Leading_Indicator_${regionText}_${dateText}.png`;
+            const fileName = `Summary_Performance_Leading_Indicator_${regionText}_${dateText}.png`;
 
             html2canvas(captureWrapper, { scale: 2, useCORS: true, backgroundColor: null, logging: false }).then(canvas => {
                 const link = document.createElement('a');

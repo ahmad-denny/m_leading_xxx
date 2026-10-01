@@ -1769,7 +1769,7 @@
 		    let region = 'Region', period = '';
 		    try { region = document.getElementById('headerSubtitle').innerText.trim().replace(/\s+/g, '_'); } catch (e) {}
 		    try { period = currentActiveJson.label; } catch (e) {}
-		    return `Breakdown_${region}${period ? '_' + period : ''}`.replace(/[\\/:*?"<>|]/g, '');
+		    return `Summary_KPI_${region}${period ? '_' + period : ''}`.replace(/[\\/:*?"<>|]/g, '');
 		}
 
 		function toggleExportMenu(e) {
@@ -1892,7 +1892,7 @@
 		    }
 		    ws['!cols'] = [{ wch: 5 }, { wch: 20 }, { wch: 28 }, ...metrics.map(() => ({ wch: 16 }))];
 		    const wb = XLSX.utils.book_new();
-		    XLSX.utils.book_append_sheet(wb, ws, 'Breakdown');
+		    XLSX.utils.book_append_sheet(wb, ws, 'Summary_KPI');
 		    XLSX.writeFile(wb, getDetailExportName() + '.xlsx');
 		}
 

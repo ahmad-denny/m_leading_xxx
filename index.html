@@ -445,9 +445,9 @@
 		.export-wrap { position: fixed; left: -9999px; top: 0; padding: 16px; background: var(--card-bg); color: var(--text); width: max-content; font-family: inherit; }
 		.export-title { font-weight: bold; font-size: 15px; text-transform: uppercase; margin-bottom: 4px; }
 		.export-sub { font-size: 12px; color: var(--text-muted); margin-bottom: 12px; }
-		.export-printed-by { display: flex; flex-direction: column; align-items: flex-end; justify-content: center; flex-shrink: 0; margin-left: 24px; line-height: 1.3; text-align: right; white-space: nowrap; }
-		.export-printed-label { font-size: 11px; font-style: italic; color: var(--text-muted); }
-		.export-printed-name { font-size: 13px; font-weight: 800; color: var(--text); text-transform: uppercase; letter-spacing: 0.3px; }
+		.export-printed-by { display: flex; flex-direction: row; align-items: baseline; justify-content: flex-end; gap: 6px; flex-shrink: 0; margin-left: 24px; text-align: right; white-space: nowrap; }
+		.export-printed-label { font-style: italic; color: var(--text-muted); }
+		.export-printed-name { font-weight: 800; color: var(--text); text-transform: uppercase; letter-spacing: 0.3px; }
 		.export-table { border-collapse: collapse; font-size: 12px; white-space: nowrap; }
 		.export-table th, .export-table td { padding: 8px 12px; border-bottom: 1px solid var(--border); text-align: left; }
 		.export-table th { background: var(--bg); text-transform: uppercase; border-bottom: 2px solid var(--border); border-top: 2px solid var(--border); }
@@ -1891,6 +1891,12 @@
 		    const userName = ((loggedUser && loggedUser.nama) || (document.getElementById('userNameChip') || {}).textContent || '-').toString().trim().toUpperCase();
 		    const box = document.createElement('div');
 		    box.className = 'export-printed-by';
+		    const metaEl = document.getElementById('headerMeta');
+		    if (metaEl) {
+		        const cs = getComputedStyle(metaEl);
+		        box.style.fontSize = cs.fontSize;
+		        box.style.lineHeight = cs.lineHeight;
+		    }
 		    const lbl = document.createElement('span');
 		    lbl.className = 'export-printed-label';
 		    lbl.textContent = 'Printed by';
@@ -1927,6 +1933,7 @@
 		    const hdrWrapper = headerClone.querySelector('.header-content-wrapper');
 		    if (hdrWrapper) {
 		        hdrWrapper.style.paddingRight = '0';
+		        hdrWrapper.style.alignItems = 'flex-end';
 		        const printedBy = createPrintedByEl();
 		        hdrWrapper.appendChild(printedBy);
 		    }
@@ -2099,7 +2106,7 @@
             headerClone.style.minHeight = '0';
             headerClone.style.paddingBottom = '12px';
             const hdrWrapperClone = headerClone.querySelector('.header-content-wrapper');
-            if (hdrWrapperClone) hdrWrapperClone.appendChild(createPrintedByEl());
+            if (hdrWrapperClone) { hdrWrapperClone.style.alignItems = 'flex-end'; hdrWrapperClone.appendChild(createPrintedByEl()); }
 
 //            footerClone.style.marginTop = '15px';
 //            footerClone.style.paddingTop = '10px';

@@ -1917,6 +1917,35 @@
 		    return box;
 		}
 
+		function layoutExportHeader(headerClone, hdrWrapper) {
+		    // Desktop: tata letak lama (Printed by di kanan). Mobile: susun rapi per baris.
+		    const printedBy = createPrintedByEl();
+		    if (window.innerWidth > 900) {
+		        hdrWrapper.style.alignItems = 'flex-end';
+		        hdrWrapper.appendChild(printedBy);
+		        return;
+		    }
+		    const metaP = headerClone.querySelector('#headerMeta');
+		    const metaI = metaP ? metaP.parentElement : null;
+		    hdrWrapper.style.flexWrap = 'wrap';
+		    hdrWrapper.style.alignItems = 'center';
+		    hdrWrapper.style.justifyContent = 'flex-start';
+		    hdrWrapper.style.paddingRight = '0';
+		    const left = hdrWrapper.querySelector('.header-left-group');
+		    if (left) { left.style.flex = '0 0 100%'; }
+		    const row = document.createElement('div');
+		    row.style.cssText = 'display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:4px 12px;width:100%;margin-top:10px;';
+		    if (metaI && metaP) {
+		        metaI.style.margin = '0';
+		        metaP.style.cssText += ';margin:0 !important;white-space:nowrap;font-size:12px;';
+		        row.appendChild(metaI);
+		    }
+		    printedBy.style.marginLeft = '0';
+		    printedBy.style.fontSize = '12px';
+		    row.appendChild(printedBy);
+		    hdrWrapper.appendChild(row);
+		}
+
 		function exportDetailImage() {
 		    const btn = document.getElementById('exportTableBtn');
 		    const originalIcon = btn ? btn.innerHTML : '';
@@ -1942,9 +1971,7 @@
 		    const hdrWrapper = headerClone.querySelector('.header-content-wrapper');
 		    if (hdrWrapper) {
 		        hdrWrapper.style.paddingRight = '0';
-		        hdrWrapper.style.alignItems = 'flex-end';
-		        const printedBy = createPrintedByEl();
-		        hdrWrapper.appendChild(printedBy);
+		        layoutExportHeader(headerClone, hdrWrapper);
 		    }
 		    wrap.appendChild(headerClone);
 
@@ -2115,7 +2142,7 @@
             headerClone.style.minHeight = '0';
             headerClone.style.paddingBottom = '12px';
             const hdrWrapperClone = headerClone.querySelector('.header-content-wrapper');
-            if (hdrWrapperClone) { hdrWrapperClone.style.alignItems = 'flex-end'; hdrWrapperClone.appendChild(createPrintedByEl()); }
+            if (hdrWrapperClone) { layoutExportHeader(headerClone, hdrWrapperClone); }
 
 //            footerClone.style.marginTop = '15px';
 //            footerClone.style.paddingTop = '10px';

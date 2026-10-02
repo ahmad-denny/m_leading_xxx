@@ -741,6 +741,58 @@
         }
 
 
+        /* ===== MOBILE: LIVE HEADER (rapi & ringkas) ===== */
+        @media (max-width: 900px) {
+            .main-content > .header {
+                padding: 10px 12px 0 12px;
+                min-height: 0;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            }
+            .main-content > .header .header-content-wrapper { padding-right: 0; align-items: center; }
+            .main-content > .header .header-left-group { gap: 10px; align-items: center; }
+            .main-content > .header .header-left-group > div {
+                align-items: center !important;
+                gap: 8px !important;
+                min-width: 0;
+            }
+            .main-content > .header .header-left-group > div > div { min-width: 0; }
+            .main-content > .header img.logo { width: 30px !important; height: 30px !important; flex-shrink: 0; }
+            .main-content > .header h1 {
+                font-size: 15px !important;
+                font-weight: 800 !important;
+                letter-spacing: 0.3px;
+                line-height: 1.2 !important;
+                white-space: nowrap;
+            }
+            .main-content > .header #headerSubtitle {
+                font-size: 11.5px !important;
+                line-height: 1.25 !important;
+                margin-top: 1px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-width: 100%;
+            }
+            .main-content > .header .header-meta-wrap { display: block; margin-top: 3px !important; }
+            .main-content > .header #headerMeta {
+                font-size: 10.5px;
+                line-height: 1.3;
+                margin: 0 !important;
+                white-space: nowrap;
+                color: var(--text-muted);
+            }
+            .main-content > .header .data-tabs-container {
+                margin-top: 8px;
+                gap: 2px;
+                border-left: 0 !important;
+                border-right: 0 !important;
+                border-top: 0 !important;
+                border-bottom: 1px solid var(--border) !important;
+            }
+            .main-content > .header .data-tab-btn { padding: 6px 14px; font-size: 0.78rem; }
+        }
+
+
         /* ===== MOBILE: DETAILED BREAKDOWN ===== */
         @media (max-width: 900px) {
             /* 1. Font tabel diperkecil (format angka & warna tidak diubah) */
@@ -1029,7 +1081,7 @@
                             <div id="headerSubtitle" style="font-size: 14px; font-weight: normal; color: var(--text-muted); line-height: 1.2;">
                                 REGION SUMATERA
                             </div>
-                            <i style="margin-top: 12px;"><p id="headerMeta" style="margin: 0;"> -- Juni 2026  💼 --</p></i>
+                            <i class="header-meta-wrap" style="margin-top: 12px;"><p id="headerMeta" style="margin: 0;"> -- Juni 2026  💼 --</p></i>
                         </div>
                     </div>
                 </div>
@@ -1178,7 +1230,22 @@
             window.addEventListener('resize', checkMobileView);
         };
 
+        function syncContentTop() {
+            const hdr = document.querySelector('.main-content > .header');
+            const sc = document.getElementById('contentScroll');
+            if (!hdr || !sc) return;
+            if (window.innerWidth <= 900 && hdr.offsetHeight > 0) sc.style.top = (hdr.offsetHeight + 8) + 'px';
+            else sc.style.top = '';
+        }
+        (function initHeaderSync() {
+            const hdr = document.querySelector('.main-content > .header');
+            if (hdr && window.ResizeObserver) new ResizeObserver(syncContentTop).observe(hdr);
+            window.addEventListener('resize', syncContentTop);
+            window.addEventListener('load', syncContentTop);
+        })();
+
         function checkMobileView() {
+            syncContentTop();
             const isMobile = window.innerWidth <= 900;
             const menuToggle = document.querySelector('.menu-toggle');
             const filterToggle = document.querySelector('.filter-toggle');
@@ -1919,6 +1986,7 @@
 
 		function layoutExportHeader(headerClone, hdrWrapper) {
 		    // Desktop: tata letak lama (Printed by di kanan). Mobile: susun rapi per baris.
+		    headerClone.querySelectorAll('.menu-toggle, .header-actions, .data-tabs-container').forEach(el => el.remove());
 		    const printedBy = createPrintedByEl();
 		    if (window.innerWidth > 900) {
 		        hdrWrapper.style.alignItems = 'flex-end';
@@ -2138,7 +2206,7 @@
             headerClone.style.borderRadius = '8px';
             const actionsClone = headerClone.querySelector('.header-actions');
             if(actionsClone) actionsClone.style.display = 'none';
-            headerClone.querySelectorAll('.data-tabs-container').forEach(el => el.remove());
+            headerClone.querySelectorAll('.data-tabs-container, .menu-toggle').forEach(el => el.remove());
             headerClone.style.minHeight = '0';
             headerClone.style.paddingBottom = '12px';
             const hdrWrapperClone = headerClone.querySelector('.header-content-wrapper');

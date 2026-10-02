@@ -564,6 +564,26 @@
         .sidebar-header h3 {
             font-size: 1.1rem;
             margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sidebar-logo-wrap {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .sidebar-logo {
+            width: 28px;
+            height: 28px;
+            object-fit: contain;
         }
         
         .sidebar-close {
@@ -935,6 +955,30 @@
             transition: all 0.3s ease; flex-shrink: 0; text-decoration: none;
         }
         .action-btn:hover { transform: scale(1.08); }
+
+        /* ===== MOBILE: logo pindah ke sidebar, tombol logout disamakan dengan tombol capture ===== */
+        @media (max-width: 900px) {
+            .main-content > .header img.logo { display: none !important; }
+
+            .header-actions .logout-btn {
+                width: 30px;
+                height: 30px;
+                font-size: 0.85rem;
+                background: var(--bg);
+                border: 1px solid var(--border);
+                color: var(--primary);
+                box-shadow: none;
+                backdrop-filter: none;
+                transition: all 0.2s;
+            }
+            .header-actions .logout-btn:hover {
+                background: var(--highlight-bg);
+                color: var(--primary);
+                border-color: var(--border);
+                transform: none;
+            }
+            [data-theme="dark"] .header-actions .logout-btn { color: var(--card-title-light); }
+        }
         
 		/* =========================================================
 		   1. UNTUK BROWSER MODERN (Chrome, Edge, Safari, Opera, Firefox baru)
@@ -1026,7 +1070,7 @@
     <!-- SIDEBAR MENU -->
     <div class="sidebar" id="sidebarMenu">
         <div class="sidebar-header">
-            <h3><i class="fas fa-bars"></i> Leading Indicator</h3>
+            <h3><span class="sidebar-logo-wrap"><img src="img/BMI.png" alt="Bank Muamalat Logo" class="sidebar-logo" width="28" height="28"></span> Leading Indicator</h3>
             <button class="sidebar-close" onclick="applySidebarFilters(); closeSidebar();">&times;</button>
         </div>
         <div class="sidebar-content">
